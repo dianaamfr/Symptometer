@@ -7,9 +7,9 @@ PREFIX doid: <http://purl.obolibrary.org/obo/>
 SELECT DISTINCT ?diseaseName ?diseaseID
 WHERE {
   ?diseaseID rdfs:label ?diseaseName .
-  ?diseaseID rdfs:subClassOf ?disease .
-  ?disease owl:onProperty doid:RO_0002452 . # R0_0002452 identifies the "has symptom" relation between a disease and a symptom
-  ?disease owl:someValuesFrom ?symptomID .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0002452 . # R0_0002452 identifies the "has symptom" relation between a disease and a symptom
+  ?restriction owl:someValuesFrom ?symptomID .
   ?symptomID rdfs:label "headache" . # symptom label
 }
 
@@ -17,9 +17,9 @@ WHERE {
 SELECT DISTINCT ?diseaseName ?diseaseID
 WHERE {
   ?diseaseID rdfs:label ?diseaseName .
-  ?diseaseID rdfs:subClassOf ?disease .
-  ?disease owl:onProperty doid:RO_0002452 .
-  ?disease owl:someValuesFrom ?symptomID .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0002452 .
+  ?restriction owl:someValuesFrom ?symptomID .
   ?symptomID rdfs:label ?symptoms . # symptom label
 }
 VALUES ?symptoms {"chest pain" "headache"}
@@ -28,9 +28,9 @@ VALUES ?symptoms {"chest pain" "headache"}
 SELECT ?diseaseName (COUNT(?symptomID) AS ?cnt)
 WHERE {
   ?diseaseID rdfs:label ?diseaseName .
-  ?diseaseID rdfs:subClassOf ?disease .
-  ?disease owl:onProperty doid:RO_0002452 .
-  ?disease owl:someValuesFrom ?symptomID .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0002452 .
+  ?restriction owl:someValuesFrom ?symptomID .
   ?symptomID rdfs:label ?symptoms . # symptom label
   VALUES ?symptoms {"chest pain" "headache" "fever"}
 } GROUP BY ?diseaseName
@@ -41,17 +41,33 @@ ORDER BY DESC(COUNT(?symptomID))
 SELECT DISTINCT ?symptomName
 WHERE{
   ?diseaseID rdfs:label "long COVID"@en . # Some diseases require @en, but most don't allow it
-  ?diseaseID rdfs:subClassOf ?disease .
-  ?disease owl:onProperty doid:RO_0002452 .
-  ?disease owl:someValuesFrom ?symptomID .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0002452 .
+  ?restriction owl:someValuesFrom ?symptomID .
   ?symptomID rdfs:label ?symptomName
 }
+
+
 
 
 # Find related symptoms 
 # symptom1 é dado pelo user
 # sugerir symptoms que estão normalmente associados (ocorrem em simultaneo)
-# 
+SELECT ?symptom
+WHERE {
+      ?rest owl:onProperty doid:RO_0002452 .
+      ?rest2 owl:onProperty doid:RO_0002452 .
+      ?rest owl:someValuesFrom ?symptomID1 .
+      ?rest2 owl:someValuesFrom ?symptomID2 .
+      ?diseaseID rdfs:label ?diseaseName .
+      ?diseaseID rdfs:subClassOf ?rest .
+      ?diseaseID rdfs:subClassOf ?rest2 .
+      ?symptomID1 rdfs:label "headache".
+      ?symptomID2 rdfs:label ?symptom.
+      FILTER (?symptom != "headache")
+}
+GROUP BY ?symptom
+ORDER BY DESC(COUNT(?symptom))
 
 
 # Doenças de um grupo
