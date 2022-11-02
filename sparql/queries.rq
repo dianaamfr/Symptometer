@@ -1,0 +1,58 @@
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX doid: <http://purl.obolibrary.org/obo/>
+
+# Search diseases by symptom
+SELECT DISTINCT ?diseaseName ?diseaseID
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?disease .
+  ?disease owl:onProperty doid:RO_0002452 . # R0_0002452 identifies the "has symptom" relation between a disease and a symptom
+  ?disease owl:someValuesFrom ?symptomID .
+  ?symptomID rdfs:label "headache" . # symptom label
+}
+
+# Search diseases by multiple symptoms - OR operator
+SELECT DISTINCT ?diseaseName ?diseaseID
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?disease .
+  ?disease owl:onProperty doid:RO_0002452 .
+  ?disease owl:someValuesFrom ?symptomID .
+  ?symptomID rdfs:label ?symptoms . # symptom label
+}
+VALUES ?symptoms {"chest pain" "headache"}
+
+# Search diseases by multiple symptoms - ordered by number of most symptoms matched
+SELECT ?diseaseName (COUNT(?symptomID) AS ?cnt)
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?disease .
+  ?disease owl:onProperty doid:RO_0002452 .
+  ?disease owl:someValuesFrom ?symptomID .
+  ?symptomID rdfs:label ?symptoms . # symptom label
+  VALUES ?symptoms {"chest pain" "headache" "fever"}
+} GROUP BY ?diseaseName
+ORDER BY DESC(COUNT(?symptomID))
+
+# Get disease details
+# GROUP_CONCAT
+SELECT DISTINCT ?symptomName
+WHERE{
+  ?diseaseID rdfs:label "long COVID"@en . # Some diseases require @en, but most don't allow it
+  ?diseaseID rdfs:subClassOf ?disease .
+  ?disease owl:onProperty doid:RO_0002452 .
+  ?disease owl:someValuesFrom ?symptomID .
+  ?symptomID rdfs:label ?symptomName
+}
+
+
+# Find related symptoms 
+# symptom1 é dado pelo user
+# sugerir symptoms que estão normalmente associados (ocorrem em simultaneo)
+# 
+
+
+# Doenças de um grupo
+
