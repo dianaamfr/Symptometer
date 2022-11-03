@@ -70,5 +70,61 @@ GROUP BY ?symptom
 ORDER BY DESC(COUNT(?symptom))
 
 
-# Doenças de um grupo
+# Diseases on each body part (brain, kidneys etc)
 
+SELECT ?location (COUNT(?diseaseID) AS ?num_diseases)
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0004026 .
+  ?restriction owl:someValuesFrom ?locationID .
+  ?locationID rdfs:label ?location . 
+}
+GROUP BY(?location)
+ORDER BY DESC(COUNT(?diseaseID))
+
+
+# Find to which group a disease belongs to:
+
+SELECT DISTINCT ?groupName (COUNT(?diseaseID) AS ?num_subgroups)
+WHERE {
+  ?diseaseID rdfs:label "COVID-19"@en.
+  ?diseaseID rdfs:subClassOf* ?classID .
+  ?classID rdfs:subClassOf doid:DOID_4.
+  ?classID rdfs:label ?groupName .
+}
+GROUP BY ?groupName
+ORDER BY DESC(COUNT(?diseaseID))
+
+# Find list of all subgroups that a disease belongs to:
+# EX: Covid belongs to "Coronavirus infectious disease"@en < viral infectious disease < disease by infectious agent < disease
+
+SELECT DISTINCT ?groupName
+WHERE {
+  ?diseaseID rdfs:label "COVID-19"@en.
+  ?diseaseID rdfs:subClassOf* ?classID .
+  ?classID rdfs:label ?groupName .
+}
+
+# List of the eight main groups:
+
+SELECT DISTINCT ?groupName (COUNT(?diseaseID) AS ?num_subgroups)
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName.
+  ?diseaseID rdfs:subClassOf ?classID .
+  ?classID rdfs:subClassOf doid:DOID_4.
+  ?classID rdfs:label ?groupName .
+}
+GROUP BY ?groupName
+ORDER BY DESC(COUNT(?diseaseID))
+
+# List of all possible groups and number of diseases on each group:
+
+SELECT DISTINCT ?groupName (COUNT(?diseaseID) AS ?num_subgroups)
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName.
+  ?diseaseID rdfs:subClassOf ?classID .
+  ?classID rdfs:label ?groupName .
+}
+GROUP BY ?groupName
+ORDER BY DESC(COUNT(?diseaseID))
