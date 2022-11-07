@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
 
 function App(){
-
+  const backendUrl = "http://localhost:8000";
   const [backendData,setBackendData] = useState([{}])
 
   useEffect(() =>{
     const requestOptions = {
-        headers: { 'Content-type': 'application/x-www-form-urlencoded',
-                    Accept: 'application/sparql-results+json'},
+      method: 'GET',
+      headers: { 
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
     };
-    fetch("http://localhost:3030/#/dataset/ds/query/", requestOptions).then(
-      response => {
-        console.log(response)
-        response.json()
+    fetch(backendUrl, requestOptions,
+    ).then(response => {
+      return response.json()
       }
     ).then(
       data => {
+        console.log(data.results);
         setBackendData(data)
       }
     )
