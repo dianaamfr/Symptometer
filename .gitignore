@@ -104,5 +104,6 @@ dist
 .tern-port
 
 # Jena
-.jena/databases/*
-.jena/logs/
+jena/databases/db/Data-0001/
+jena/databases/db/tdb.lock
+jena/logs/
