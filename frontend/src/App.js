@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 
 function App(){
   const backendUrl = "http://localhost:8000";
-  const [backendData,setBackendData] = useState([{}])
 
   useEffect(() =>{
     const requestOptions = {
@@ -14,12 +13,11 @@ function App(){
     };
     fetch(backendUrl, requestOptions,
     ).then(response => {
-      return response.json()
+      return response.json();
       }
     ).then(
       data => {
         console.log(data.results);
-        setBackendData(data)
       }
     )
   }, [])

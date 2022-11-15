@@ -8,7 +8,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-const ontologyUrl = "http://localhost:3030/ontology/query";
+const ontologyUrl = "http://fuseki:3030/ontology/query";
 const prefix = 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n ';
 const myQuery = prefix + ' SELECT ?diseaseID ?diseaseName \n\
   WHERE { \n\
