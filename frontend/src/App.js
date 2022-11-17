@@ -18,13 +18,13 @@ function App(){
     ).then(
       data => {
         console.log(data.results);
+
       }
     )
   }, [])
 
   return(
     <div>
-
     </div>
   )
 }

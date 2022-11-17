@@ -14,7 +14,7 @@ const myQuery = prefix + ' SELECT ?diseaseID ?diseaseName \n\
   WHERE { \n\
     ?diseaseID rdfs:label ?diseaseName . \n\
     ?diseaseID rdfs:subClassOf ?disease . \n\
-  }';
+  } LIMIT 10';
 
 router.get('/', async (req, res) => {
   await axios({
