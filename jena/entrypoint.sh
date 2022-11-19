@@ -3,5 +3,3 @@
 
 ## env | sort
 exec "$JAVA_HOME/bin/java" $JAVA_OPTIONS -jar "${FUSEKI_DIR}/${FUSEKI_JAR}" "$@"
-
-exec curl --location --request POST 'http://localhost:3030/ontology/data' --header 'Content-Type: multipart/form-data' --form 'data=@ontology/doid-merged.owl'
