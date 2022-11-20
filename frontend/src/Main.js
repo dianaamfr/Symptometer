@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {Routes, Route, useNavigate} from 'react-router-dom';
 
 function Main() {
   const backendUrl = "http://localhost:8000";
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [data, setData] = useState(null);
 
   async function handleClick() {
