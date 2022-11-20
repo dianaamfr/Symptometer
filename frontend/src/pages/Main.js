@@ -1,56 +1,50 @@
 import React, { useEffect, useState } from "react";
 
+import Footer from "../components/footer.js";
+
+
 function Main() {
   const backendUrl = "http://localhost:8000";
   //const navigate = useNavigate();
   const [data, setData] = useState(null);
 
-  async function handleClick() {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    fetch(backendUrl, requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.results);
-        setData(data);
-      });
+  async function handleClickAboutUs() {
+    window.location.href = '/aboutus';
+  }
+
+  async function handleClickProject() {
+    window.location.href = '/aboutproject';
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     let search = event.currentTarget.elements.search.value;
     console.log(search);
-    // const requestOptions = {
-    //   method: "GET",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // };
-    // fetch(backendUrl, requestOptions)
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data.results);
-    //     setData(data);
-    //   });
+    window.location.href = '/results/?q='+search;
+    const requestOptions = {
+       method: "GET",
+       body: JSON.stringify(search),
+       headers: {
+         Accept: "application/json",
+         "Access-Control-Allow-Origin": "*",
+       },
+    };
+  /*  fetch(backendUrl, requestOptions)
+       .then((response) => {
+         return response.json();
+       })
+       .then((data) => {
+         console.log(data.results);
+         setData(data);
+       });*/
   }
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-white">
       <div>
         <img
-          className="h-[89px] w-[273px]"
-          src="https://ppc.co/wp-content/uploads/2021/01/Google.png"
-          alt="google Logo"
+          className="h-[150px]"
+          src={require('../assets/logo.png')} 
         />
       </div>
 
@@ -98,14 +92,19 @@ function Main() {
       </div>
 
       <div className="mt-3 flex space-x-12">
-        <button onClick={handleClick} className="bg-[#f8f9fa] px-2 py-1">
-          Google Search
+        <button onClick={handleClickAboutUs} className="bg-[#f8f9fa] px-2 py-1">
+          About Us
         </button>
-        <div className="bg-[#f8f9fa] px-2 py-1">I'm Feeling Lucky</div>
+        <button onClick={handleClickProject} className="bg-[#f8f9fa] px-2 py-1">
+          Project Details
+        </button>
+       
       </div>
 
       {data != null && <div>Olá</div>}
+      
     </div>
+    
   );
 }
 
