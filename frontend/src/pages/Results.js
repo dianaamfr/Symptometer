@@ -6,6 +6,8 @@ import Container from "react-bootstrap/Container";
 
 function Results() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+
   // Get results
   useEffect(() => {
     const requestOptions = {

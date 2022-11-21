@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/footer.js";
+import { useNavigate } from "react-router-dom";
 
 function Main() {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
 
   async function handleClickAboutUs() {
@@ -16,24 +17,26 @@ function Main() {
   async function handleSubmit(event) {
     event.preventDefault();
     let search = event.currentTarget.elements.search.value;
-    console.log(search);
-    window.location.href = '/results/?q='+search;
-    const requestOptions = {
-       method: "GET",
-       body: JSON.stringify(search),
-       headers: {
-         Accept: "application/json",
-         "Access-Control-Allow-Origin": "*",
-       },
-    };
-  /*  fetch(backendUrl, requestOptions)
-       .then((response) => {
-         return response.json();
-       })
-       .then((data) => {
-         console.log(data.results);
-         setData(data);
-       });*/
+    navigate('results', {
+      randomParameter: "Hello"
+    });
+    // window.location.href = '/results';///?q='+search;
+    // const requestOptions = {
+    //    method: "POST",
+    //    body: JSON.stringify(search),
+    //    headers: {
+    //      Accept: "application/json",
+    //      "Access-Control-Allow-Origin": "*",
+    //    },
+    // };
+    // fetch(backendUrl, requestOptions)
+    //   .then((response) => {
+    //   return response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data.results);
+    //     setData(data);
+    //   });
   }
 
   return (
