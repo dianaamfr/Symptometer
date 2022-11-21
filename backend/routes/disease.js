@@ -18,7 +18,6 @@ router.get("/bySymptoms", async (req, res) => {
   let symptoms = JSON.parse(req.query.symptoms);
   symptoms = symptoms.map((e) => { return `'${e}'`;});
   const symptomsValues = symptoms.join(" ");
-  console.log(symptomsValues)
   const query = prefix +
     ` SELECT ?diseaseName \n\
       WHERE { \n\

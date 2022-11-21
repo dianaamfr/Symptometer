@@ -22,23 +22,6 @@ function Main() {
         query: query
       }
     });
-    // window.location.href = '/results';///?q='+search;
-    // const requestOptions = {
-    //    method: "POST",
-    //    body: JSON.stringify(search),
-    //    headers: {
-    //      Accept: "application/json",
-    //      "Access-Control-Allow-Origin": "*",
-    //    },
-    // };
-    // fetch(backendUrl, requestOptions)
-    //   .then((response) => {
-    //   return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data.results);
-    //     setData(data);
-    //   });
   }
 
   return (

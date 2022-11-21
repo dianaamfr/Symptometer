@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Results() {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,6 +17,10 @@ function Results() {
 
   // Get results
   useEffect(() => {
+    const params = new URLSearchParams({
+      symptoms: JSON.stringify(queryArray),
+    }).toString();
+
     const requestOptions = {
       method: "GET",
       headers: {
@@ -24,9 +28,7 @@ function Results() {
         "Access-Control-Allow-Origin": "*",
       },
     };
-    fetch(backendUrl + "?" + + new URLSearchParams({
-      symptoms: JSON.stringify(queryArray),
-      }), requestOptions)
+    fetch(backendUrl + "?" + params, requestOptions)
       .then((response) => {
         return response.json();
       })
