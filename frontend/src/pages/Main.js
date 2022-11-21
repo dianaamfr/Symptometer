@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-
 import Footer from "../components/footer.js";
 
-
 function Main() {
-  const backendUrl = "http://localhost:8000";
   //const navigate = useNavigate();
   const [data, setData] = useState(null);
 
