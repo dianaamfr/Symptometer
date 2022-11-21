@@ -7,18 +7,20 @@ function Main() {
   const [data, setData] = useState(null);
 
   async function handleClickAboutUs() {
-    window.location.href = '/aboutus';
+    navigate('/aboutus');
   }
 
   async function handleClickProject() {
-    window.location.href = '/aboutproject';
+    navigate('/aboutproject');
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let search = event.currentTarget.elements.search.value;
-    navigate('results', {
-      randomParameter: "Hello"
+    let query = event.currentTarget.elements.query.value;
+    navigate('/results', {
+      state:{
+        query: query
+      }
     });
     // window.location.href = '/results';///?q='+search;
     // const requestOptions = {
@@ -67,7 +69,7 @@ function Main() {
         </div>
         <form onSubmit={handleSubmit}>
           <input
-            id="search"
+            id="query"
             type="text"
             className="w-full bg-transparent rounded-full py-[14px] pl-4 outline-none"
           />

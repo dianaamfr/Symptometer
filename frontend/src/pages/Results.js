@@ -3,10 +3,17 @@ import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Results() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  //get search query
+  let query = location.state.query;
+  let queryArray = query.split(" ");
 
   // Get results
   useEffect(() => {
@@ -17,7 +24,9 @@ function Results() {
         "Access-Control-Allow-Origin": "*",
       },
     };
-    fetch(backendUrl + "/disease/bySymptoms", requestOptions)
+    fetch(backendUrl + "?" + + new URLSearchParams({
+      symptoms: JSON.stringify(queryArray),
+      }), requestOptions)
       .then((response) => {
         return response.json();
       })
@@ -26,7 +35,15 @@ function Results() {
       });
   }, []);
 
-  async function handleSubmit(event) {}
+  async function handleSubmit(event) {
+    event.preventDefault();
+    let query = event.currentTarget.elements.query.value;
+    navigate('/results', {
+      state:{
+        query: query
+      }
+    });
+  }
 
   async function backToHomePage() {
     window.location.href = "/";
@@ -58,7 +75,7 @@ function Results() {
             </div>
             <form onSubmit={handleSubmit}>
               <input
-                id="search"
+                id="query"
                 type="text"
                 className="w-full bg-transparent rounded-full py-2 pl-4 outline-none"
               />
