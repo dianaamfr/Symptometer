@@ -36,4 +36,6 @@ function getDiseaseGroup(diseaseICD){
     }
 }
 
+export default getDiseaseGroup;
+
 // console.log(getDiseaseGroup("ICD10CM:E88"))

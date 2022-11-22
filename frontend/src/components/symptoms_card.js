@@ -8,7 +8,7 @@ class Symptoms extends React.Component {
     render() {
 
         return (
-            <a
+            <div
                 className="mt-3 mx-0 relative block p-8 overflow-hidden border bg-white border-slate-100 rounded-lg ml-6 mr-6"
                 href=""
             >
@@ -38,7 +38,7 @@ class Symptoms extends React.Component {
                 </div>
 
 
-            </a>
+            </div>
         )
 
     }

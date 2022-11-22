@@ -5,6 +5,7 @@ import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import getDiseaseGroup from "../utils/icd10_codes.js";
 
 function Results() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
@@ -15,6 +16,16 @@ function Results() {
   //get search query
   let query = location.state.query;
   let queryArray = query.split(" ");
+
+  function addDiseaseGroup(diseases) {
+    diseases.forEach(element => {
+      element.group = getDiseaseGroup(element.icd.value);
+    }); 
+
+    // let diseaseGroup = getDiseaseGroup(disease.diseaseCode.value);
+    // disease.diseaseGroup = diseaseGroup;
+    // return disease;
+  }
 
   // Get results
   useEffect(() => {
@@ -34,8 +45,9 @@ function Results() {
         return response.json();
       })
       .then((data) => {
-        console.log(data)
-        setQueryResults(data.results.bindings);
+        let results = data.results.bindings;
+        addDiseaseGroup(results);
+        setQueryResults(results);
       });
   }, []);
 
@@ -50,14 +62,16 @@ function Results() {
   }
 
   async function backToHomePage() {
-    window.location.href = "/";
+    navigate('/');
   }
 
   return (
     <Container fluid="md">
       <Row className="mt-5">
         <Col className="col-2">
-          <img onClick={backToHomePage} src={require("../assets/logo.png")} />
+          <button>
+            <img onClick={backToHomePage} src={require("../assets/logo.png")} />
+          </button>
         </Col>
         <Col className="p-0 flex items-center">
           <div className="w-[100%] mr-0 flex items-center rounded-full border hover:shadow-md">

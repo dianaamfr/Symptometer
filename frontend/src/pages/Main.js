@@ -50,7 +50,7 @@ function Main() {
             />
           </svg>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form className="w-full bg-transparent rounded-full pl-4 outline-none" onSubmit={handleSubmit}>
           <input
             id="query"
             type="text"
