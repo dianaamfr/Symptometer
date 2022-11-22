@@ -10,6 +10,7 @@ function Results() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const navigate = useNavigate();
   const location = useLocation();
+  let [queryResults, setQueryResults] = useState([]);
 
   //get search query
   let query = location.state.query;
@@ -33,7 +34,7 @@ function Results() {
         return response.json();
       })
       .then((data) => {
-        console.log(data.results);
+        setQueryResults(data.results.bindings);
       });
   }, []);
 
@@ -104,9 +105,11 @@ function Results() {
       </Row>
       <Row className="pr-0 mr-0">
         <Col className="col-9 pr-0 mr-0">
+          {queryResults.map((disease, index) => 
+            <DiseaseCard key={disease.diseaseName.value + index} disease={disease} />)}
+          {/* <DiseaseCard />
           <DiseaseCard />
-          <DiseaseCard />
-          <DiseaseCard />
+          <DiseaseCard /> */}
         </Col>
         <Col className="p-0 col-3">
           <Symptoms />
