@@ -34,6 +34,7 @@ function Results() {
         return response.json();
       })
       .then((data) => {
+        console.log(data)
         setQueryResults(data.results.bindings);
       });
   }, []);

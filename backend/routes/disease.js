@@ -6,8 +6,9 @@ require("dotenv").config();
 const ontologyUrl = process.env.FUSEKI_URL;
 const prefix =
   "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n\
-                PREFIX owl: <http://www.w3.org/2002/07/owl#> \n\
-                PREFIX doid: <http://purl.obolibrary.org/obo/>";
+  PREFIX owl: <http://www.w3.org/2002/07/owl#> \n\
+  PREFIX doid: <http://purl.obolibrary.org/obo/> \n\
+  PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>";
 
 router.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -23,16 +24,24 @@ router.get("/bySymptoms", async (req, res) => {
   const symptomsValues = symptoms.join(" ");
   const query =
     prefix +
-    ` SELECT ?diseaseName \n\
+    ` SELECT ?diseaseName ?definition ?icd \n\
       WHERE { \n\
-      ?diseaseID rdfs:label ?diseaseName . \n\
-      ?diseaseID rdfs:subClassOf ?restriction . \n\
-      ?restriction owl:onProperty doid:RO_0002452 . \n\
-      ?restriction owl:someValuesFrom ?symptomID . \n\
-      ?symptomID rdfs:label ?symptoms . \n\
-      VALUES ?symptoms {${symptomsValues}} \n\
-    } GROUP BY ?diseaseName \n\
-    ORDER BY DESC(COUNT(?symptomID))`;
+        ?diseaseID rdfs:label ?diseaseName . \n\
+        ?diseaseID doid:IAO_0000115 ?definition .
+        ?diseaseID oboinowl:hasDbXref ?icd . \n\
+        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
+        { \n\
+          SELECT ?diseaseID \n\
+          WHERE { \n\
+            ?diseaseID rdfs:subClassOf ?restriction . \n\
+            ?restriction owl:onProperty doid:RO_0002452 . \n\
+            ?restriction owl:someValuesFrom ?symptomID . \n\
+            ?symptomID rdfs:label ?symptoms . \n\
+            VALUES ?symptoms {${symptomsValues}} \n\
+          } GROUP BY ?diseaseID \n\
+          ORDER BY DESC(COUNT(?symptomID)) \n\
+        }\n\
+      }`;
 
   await axios({
     url: ontologyUrl,

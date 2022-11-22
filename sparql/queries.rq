@@ -47,7 +47,31 @@ WHERE{
   ?symptomID rdfs:label ?symptomName
 }
 
+# Get diseases by symptoms - with description and icd id
+PREFIX doi: <https://doi.org/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX doid: <http://purl.obolibrary.org/obo/>
+PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
 
+SELECT ?diseaseName ?definition ?icd
+WHERE {
+	?diseaseID rdfs:label ?diseaseName . 
+    ?diseaseID doid:IAO_0000115 ?definition .
+    ?diseaseID oboinowl:hasDbXref ?icd .
+    FILTER(STRSTARTS(STR(?icd), "ICD10CM:"))
+  	{
+    	SELECT ?diseaseID
+        WHERE {
+          	?diseaseID rdfs:subClassOf ?restriction .
+          	?restriction owl:onProperty doid:RO_0002452 .
+          	?restriction owl:someValuesFrom ?symptomID .
+          	?symptomID rdfs:label ?symptoms .
+        	VALUES ?symptoms {"headache" "fatigue"}
+    	} GROUP BY ?diseaseID
+    	ORDER BY DESC(COUNT(?symptomID))
+  }
+}
 
 
 # Find related symptoms 
@@ -85,7 +109,6 @@ ORDER BY DESC(COUNT(?diseaseID))
 
 
 # Find to which group a disease belongs to:
-
 SELECT DISTINCT ?groupName (COUNT(?diseaseID) AS ?num_subgroups)
 WHERE {
   ?diseaseID rdfs:label "COVID-19"@en.
@@ -98,7 +121,6 @@ ORDER BY DESC(COUNT(?diseaseID))
 
 # Find list of all subgroups that a disease belongs to:
 # EX: Covid belongs to "Coronavirus infectious disease"@en < viral infectious disease < disease by infectious agent < disease
-
 SELECT DISTINCT ?groupName
 WHERE {
   ?diseaseID rdfs:label "COVID-19"@en.
