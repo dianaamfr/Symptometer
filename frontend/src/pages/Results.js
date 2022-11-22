@@ -13,7 +13,7 @@ function Results() {
   const location = useLocation();
   let [queryResults, setQueryResults] = useState([]);
 
-  //get search query
+  //get search query from Main.js
   let query = location.state.query;
   let queryArray = query.split(" ");
 
@@ -22,9 +22,6 @@ function Results() {
       element.group = getDiseaseGroup(element.icd.value);
     }); 
 
-    // let diseaseGroup = getDiseaseGroup(disease.diseaseCode.value);
-    // disease.diseaseGroup = diseaseGroup;
-    // return disease;
   }
 
   // Get results
@@ -53,10 +50,10 @@ function Results() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let query = event.currentTarget.elements.query.value;
+    let newQuery = event.currentTarget.elements.query.value;
     navigate('/results', {
       state:{
-        query: query
+        query: newQuery
       }
     });
   }
@@ -91,7 +88,7 @@ function Results() {
                 />
               </svg>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form className="w-full bg-transparent rounded-full outline-none" onSubmit={handleSubmit}>
               <input
                 id="query"
                 type="text"
