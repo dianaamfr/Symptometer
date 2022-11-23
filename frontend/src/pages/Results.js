@@ -3,31 +3,24 @@ import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
 
 function Results() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
-  const navigate = useNavigate();
-  const location = useLocation();
-  let [queryResults, setQueryResults] = useState([]);
-
-  //get search query from Main.js
-  let query = location.state.query;
-  let queryArray = query.split(" ");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [queryResults, setQueryResults] = useState([]);
 
   function addDiseaseGroup(diseases) {
     diseases.forEach(element => {
       element.group = getDiseaseGroup(element.icd.value);
     }); 
-
   }
 
   // Get results
-  useEffect(() => {
+  useEffect(() => { 
     const params = new URLSearchParams({
-      symptoms: JSON.stringify(queryArray),
+      symptoms: JSON.stringify(searchParams.getAll("query")),
     }).toString();
 
     const requestOptions = {
@@ -46,16 +39,14 @@ function Results() {
         addDiseaseGroup(results);
         setQueryResults(results);
       });
-  }, []);
+  }, [searchParams]);
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let newQuery = event.currentTarget.elements.query.value;
-    navigate('/results', {
-      state:{
-        query: newQuery
-      }
-    });
+    let query = event.currentTarget.elements.query.value;
+    let queryArray = query.split(",");
+    var params = new URLSearchParams(queryArray.map(s =>['query',s]))
+    setSearchParams(params);
   }
 
   async function backToHomePage() {

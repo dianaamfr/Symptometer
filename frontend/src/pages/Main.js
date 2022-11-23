@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/footer.js";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 function Main() {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
 
   async function handleClickAboutUs() {
     navigate('/aboutus');
@@ -17,10 +16,12 @@ function Main() {
   async function handleSubmit(event) {
     event.preventDefault();
     let query = event.currentTarget.elements.query.value;
-    navigate('/results', {
-      state:{
-        query: query
-      }
+    let queryArray = query.split(",");
+    var params = new URLSearchParams(queryArray.map(s =>['query',s]))
+
+    navigate({
+      pathname: "/results",
+      search: `?${params.toString()}`,
     });
   }
 
@@ -85,8 +86,6 @@ function Main() {
         </button>
        
       </div>
-
-      {data != null && <div>Olá</div>}
       
     </div>
     
