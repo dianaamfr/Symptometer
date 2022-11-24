@@ -3,10 +3,11 @@ import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
 
 function Results() {
+  const navigate = useNavigate();
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
