@@ -27,8 +27,8 @@ var groups = [
 
 function getDiseaseGroup(diseaseICD){
     for (var i=0; i < groups.length; i++) {
-        if((diseaseICD[8] == groups[i].start[0] || 
-            diseaseICD[8] == groups[i].end[0]) && 
+        if((diseaseICD[8] === groups[i].start[0] || 
+            diseaseICD[8] === groups[i].end[0]) && 
             diseaseICD.substring(9) > groups[i].start.substring(1) && 
             diseaseICD.substring(9) < groups[i].end.substring(1) ){
                 return groups[i].group

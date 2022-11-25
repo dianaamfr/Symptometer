@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
 import Footer from "../components/footer.js";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Main() {
   const navigate = useNavigate();
