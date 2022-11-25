@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
@@ -12,7 +11,7 @@ function DiseasePage() {
             <Row className="mt-5">
                 <Col className="col-2">
                     <button>
-                        <img onClick={backToHomePage} src={require("../assets/logo.png")} />
+                        <img alt="" onClick={backToHomePage} src={require("../assets/logo.png")} />
                     </button>
                 </Col>
 
@@ -67,16 +66,16 @@ function DiseasePage() {
                                 <div className="flex flex-col">
                                     <dt className="text-sm font-medium text-slate-600 mb-1">See also</dt>
                                     <div className="flex flex-row">
-                                        <button class="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
+                                        <button className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
                                             Disease 1 Bla Bla 
                                         </button>
-                                        <button class="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
+                                        <button className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
                                             Disease 1 Bla Bla 
                                         </button>
-                                        <button class="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
+                                        <button className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
                                             Disease 1 Bla Bla 
                                         </button>
-                                        <button class="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
+                                        <button className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white">
                                             Disease 1 Bla Bla 
                                         </button>
                                     </div>

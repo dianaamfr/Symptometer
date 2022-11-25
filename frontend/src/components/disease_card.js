@@ -1,7 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { Row, Col } from "react-bootstrap"
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { Col } from "react-bootstrap"
+import { useNavigate } from "react-router-dom";
 
 function DiseaseCard({ disease }) {
 

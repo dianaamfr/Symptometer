@@ -1,22 +1,18 @@
-import Footer from "../components/footer.js";
+//import Footer from "../components/footer.js";
 import { useNavigate } from "react-router-dom";
 
 function Main() {
   const navigate = useNavigate();
 
   async function handleClickAboutUs() {
-    navigate('/aboutus');
-  }
-
-  async function handleClickProject() {
-    navigate('/aboutproject');
+    navigate("/aboutus");
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     let query = event.currentTarget.elements.query.value;
     let queryArray = query.split(",");
-    var params = new URLSearchParams(queryArray.map(s =>['query',s]))
+    var params = new URLSearchParams(queryArray.map((s) => ["query", s]));
 
     navigate({
       pathname: "/results",
@@ -27,10 +23,7 @@ function Main() {
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-white">
       <div>
-        <img
-          className="h-[150px]"
-          src={require('../assets/logo.png')} 
-        />
+        <img alt="" className="h-[150px]" src={require("../assets/logo.png")} />
       </div>
 
       <div className="md:w-[584px] mx-auto mt-7 flex w-[92%] items-center rounded-full border hover:shadow-md">
@@ -50,7 +43,10 @@ function Main() {
             />
           </svg>
         </div>
-        <form className="w-full bg-transparent rounded-full pl-4 outline-none" onSubmit={handleSubmit}>
+        <form
+          className="w-full bg-transparent rounded-full pl-4 outline-none"
+          onSubmit={handleSubmit}
+        >
           <input
             id="query"
             type="text"
@@ -81,9 +77,7 @@ function Main() {
           About Us
         </button>
       </div>
-      
     </div>
-    
   );
 }
 

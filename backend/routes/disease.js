@@ -17,7 +17,6 @@ router.use(function (req, res, next) {
 });
 
 router.get("/bySymptoms", async (req, res) => {
-  console.log(req.query)
   let symptoms = JSON.parse(req.query.symptoms);
   symptoms = symptoms.map((e) => {
     return `'${e}'`;

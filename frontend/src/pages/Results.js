@@ -3,7 +3,7 @@ import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useNavigate, useSearchParams, createSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
 
 function Results() {
@@ -40,7 +40,7 @@ function Results() {
         addDiseaseGroup(results);
         setQueryResults(results);
       });
-  }, [searchParams]);
+  }, [backendUrl, searchParams]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -59,7 +59,7 @@ function Results() {
       <Row className="mt-5">
         <Col className="col-2">
           <button>
-            <img onClick={backToHomePage} src={require("../assets/logo.png")} />
+            <img alt="" onClick={backToHomePage} src={require("../assets/logo.png")} />
           </button>
         </Col>
         <Col className="p-0 flex items-center">
