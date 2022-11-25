@@ -81,10 +81,6 @@ function Main() {
         <button onClick={handleClickAboutUs} className="bg-[#f8f9fa] px-2 py-1">
           About Us
         </button>
-        <button onClick={handleClickProject} className="bg-[#f8f9fa] px-2 py-1">
-          Project Details
-        </button>
-       
       </div>
       
     </div>

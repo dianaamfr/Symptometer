@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import Main from './pages/Main';
 import Results from './pages/Results';
 import AboutUs from './pages/AboutUs';
-import AboutProject from './pages/AboutProject';
+import DiseasePage from './pages/Disease';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -20,7 +20,7 @@ root.render(
           <Route index element={<Main />} />
           <Route path="results" element={<Results />} />
           <Route path="aboutus" element={<AboutUs/>} />
-          <Route path="aboutproject" element={<AboutProject/>} />
+          <Route path="disease" element={<DiseasePage/>} />
 
         </Route>
       </Routes>

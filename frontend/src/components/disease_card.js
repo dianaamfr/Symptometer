@@ -1,15 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from "react-bootstrap"
-
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 function DiseaseCard({ disease }) {
 
+    const navigate = useNavigate();
+
+    async function goToDiseasePage(){
+        navigate('/disease');
+    }
+
     return (
-        <div
-            className="mx-0 mt-3 relative block p-8 overflow-hidden border bg-white border-slate-100 rounded-lg ml-6 mr-6"
-            // href=""
-        >
+        
+
+        <div className="hover:bg-gray-400 hover:bg-opacity-10 mx-0 mt-3 relative block p-8 overflow-hidden border border-slate-100 rounded-lg ml-6 mr-6"
+            >
+                <button className="flex text-left  " onClick={goToDiseasePage}>
             <span
                 className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300 to-blue-500"
             ></span>
@@ -29,13 +36,7 @@ function DiseaseCard({ disease }) {
                         </p>
                     </div>
 
-                    <dl className="flex mt-3">
-                        <div className="flex flex-col-reverse">
-                            <dt className="text-sm font-medium text-slate-600">Part of the body</dt>
-                            <dd className="text-xs text-slate-500">Part of the body</dd>
-                        </div>
-
-                    </dl>
+                   
                 </Col>
                 <Col className="col-3">
                     <div className="flex-shrink-0 hidden ml-3 sm:block">
@@ -48,9 +49,10 @@ function DiseaseCard({ disease }) {
                 </Col>
 
             </div>
-
+            </button>
         </div>
-
+  
+        
     )
 }
 

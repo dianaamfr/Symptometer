@@ -5,8 +5,13 @@ import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 function Results() {
+
+  const navigate = useNavigate();
+
+
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
@@ -93,17 +98,12 @@ function Results() {
       <Row className="mt-3 ">
         <nav className=" mr-0 flex flex-col sm:flex-row">
           <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
-            All
+            At least one symptom
           </button>
           <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Only diseases with all symptoms
+            All symptoms
           </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Order by ...
-          </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Order by ...
-          </button>
+         
         </nav>
       </Row>
       <Row className="pr-0 mr-0">
