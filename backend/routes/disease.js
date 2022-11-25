@@ -69,12 +69,20 @@ router.get("/byAllSymptoms", async (req, res) => {
 
   const query =
     prefix +
-    ` SELECT ?diseaseName \n\
+    ` SELECT ?diseaseName ?definition ?icd \n\
       WHERE { \n\
-      ?diseaseID rdfs:label ?diseaseName . \n\
-      ${symptomsQuery}
-    } GROUP BY ?diseaseName \n\
-    ORDER BY DESC(COUNT(?symptomID))`;
+        ?diseaseID rdfs:label ?diseaseName . \n\
+        ?diseaseID doid:IAO_0000115 ?definition .
+        ?diseaseID oboinowl:hasDbXref ?icd . \n\
+        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
+        { \n\
+          SELECT ?diseaseID \n\
+          WHERE { \n\
+            ${symptomsQuery} \n\
+          } GROUP BY ?diseaseID \n\
+          ORDER BY DESC(COUNT(?symptomID)) \n\
+        }\n\
+      }`;
 
   await axios({
     url: ontologyUrl,
