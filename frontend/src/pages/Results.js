@@ -3,9 +3,8 @@ import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, createSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
-import { createSearchParams, useNavigate } from "react-router-dom";
 
 function Results() {
   const navigate = useNavigate();
