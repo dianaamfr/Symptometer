@@ -40,7 +40,7 @@ function Results() {
         addDiseaseGroup(results);
         setQueryResults(results);
       });
-  }, [searchParams]);
+  }, [backendUrl, searchParams]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -59,7 +59,7 @@ function Results() {
       <Row className="mt-5">
         <Col className="col-2">
           <button>
-            <img onClick={backToHomePage} src={require("../assets/logo.png")} />
+            <img alt="" onClick={backToHomePage} src={require("../assets/logo.png")} />
           </button>
         </Col>
         <Col className="p-0 flex items-center">
@@ -94,17 +94,12 @@ function Results() {
       <Row className="mt-3 ">
         <nav className=" mr-0 flex flex-col sm:flex-row">
           <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
-            All
+            At least one symptom
           </button>
           <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Only diseases with all symptoms
+            All symptoms
           </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Order by ...
-          </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
-            Order by ...
-          </button>
+         
         </nav>
       </Row>
       <Row className="pr-0 mr-0">
