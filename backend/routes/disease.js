@@ -24,11 +24,12 @@ router.get("/bySymptoms", async (req, res) => {
   const symptomsValues = symptoms.join(" ");
   const query =
     prefix +
-    ` SELECT ?diseaseName ?definition ?icd \n\
+    ` SELECT ?diseaseName ?definition ?icd ?doid \n\
       WHERE { \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
-        ?diseaseID doid:IAO_0000115 ?definition .
+        ?diseaseID doid:IAO_0000115 ?definition . \n\
         ?diseaseID oboinowl:hasDbXref ?icd . \n\
+        ?diseaseID oboinowl:id ?doid . \n\
         FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
         { \n\
           SELECT ?diseaseID \n\
@@ -69,11 +70,12 @@ router.get("/byAllSymptoms", async (req, res) => {
 
   const query =
     prefix +
-    ` SELECT ?diseaseName ?definition ?icd \n\
+    ` SELECT ?diseaseName ?definition ?icd ?doid \n\
       WHERE { \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
-        ?diseaseID doid:IAO_0000115 ?definition .
+        ?diseaseID doid:IAO_0000115 ?definition . \n\
         ?diseaseID oboinowl:hasDbXref ?icd . \n\
+        ?diseaseID oboinowl:id ?doid . \n\
         FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
         { \n\
           SELECT ?diseaseID \n\
