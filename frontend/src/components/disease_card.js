@@ -7,7 +7,8 @@ function DiseaseCard({ disease }) {
     const navigate = useNavigate();
 
     async function goToDiseasePage(){
-        navigate('/disease');
+        let diseaseId = disease.doid.value
+        navigate('/disease/' + diseaseId);
     }
 
     return (
@@ -31,7 +32,7 @@ function DiseaseCard({ disease }) {
 
                     <div className="mt-1 sm:pr-8">
                         <p className="text-sm text-slate-500">
-                            {disease.definition.value}
+                            {disease.definition.value.substring(0, 200)}...
                         </p>
                     </div>
 

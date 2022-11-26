@@ -7,11 +7,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import getDiseaseGroup from "../utils/icd10_codes.js";
 
 function Results() {
+
   const navigate = useNavigate();
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
-
+  
   function addDiseaseGroup(diseases) {
     diseases.forEach(element => {
       element.group = getDiseaseGroup(element.icd.value);
@@ -42,7 +43,7 @@ function Results() {
       });
   }, [backendUrl, searchParams]);
 
-  async function handleSubmit(event) {
+  async function handleSubmitSearch(event) {
     event.preventDefault();
     let query = event.currentTarget.elements.query.value;
     let queryArray = query.split(",");
@@ -80,7 +81,7 @@ function Results() {
                 />
               </svg>
             </div>
-            <form className="w-full bg-transparent rounded-full outline-none" onSubmit={handleSubmit}>
+            <form className="w-full bg-transparent rounded-full outline-none" onSubmit={handleSubmitSearch}>
               <input
                 id="query"
                 type="text"

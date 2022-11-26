@@ -1,10 +1,95 @@
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function DiseasePage() {
+
+    //const diseaseId = useParams().id;
+    const navigate = useNavigate();
+    const [diseaseId, setDiseaseId] = useState(useParams().id);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/" + diseaseId; 
+    const [nameResults, setNameResults] = useState([]);
+    const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
+    const [relatedSynonymsResults, setRelatedSynonymsResults] = useState([]);
+    const [groupResults, setGroupResults] = useState([]);
+    const [groupOfGroupResults, setGroupOfGroupResults] = useState([]);
+    const [symptomsResults, setSymptomsResults] = useState([]);
+    const [bodyPart, setBodyPart] = useState([]);
+
     async function backToHomePage() {
-        window.location.href = '/';
+        navigate('/');
     }
+
+    //Get disease details
+    useEffect(() => { 
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        };
+        fetch(backendUrl + "/name", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setNameResults(results);
+        });
+        fetch(backendUrl + "/exactSynonyms", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setExactSynonymsResults(results);
+        });
+        fetch(backendUrl + "/relatedSynonyms", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setRelatedSynonymsResults(results);
+        });
+        fetch(backendUrl + "/group", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setGroupResults(results);
+        });
+        fetch(backendUrl + "/groupOfGroup", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setGroupOfGroupResults(results);
+        });
+        fetch(backendUrl + "/bodyPart", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setBodyPart(results);
+        });
+        fetch(backendUrl + "/symptoms", requestOptions)
+            .then((response) => {
+            return response.json();
+            })
+            .then((data) => {
+            let results = data.results.bindings;
+            setSymptomsResults(results);
+        });
+        
+
+      }, [backendUrl, diseaseId]);
 
     return (
         <Container fluid="md">
@@ -29,7 +114,7 @@ function DiseasePage() {
                         <Col className="col-9">
                             <div>
                                 <h5 className="text-xl font-bold text-slate-900">
-                                    Disease Name
+                                    {nameResults.length === 0 ? "" : nameResults.map((result) => result.diseaseName.value)}
                                 </h5>
                                 
                             </div>
@@ -37,28 +122,35 @@ function DiseasePage() {
 
                             <div className="mt-1 sm:pr-8">
                                 <p className="text-sm text-slate-500">
-                                    Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    {nameResults.length === 0 ? "" : nameResults.map((result) => result.definition.value)}
                                 </p>
                             </div>
 
                             <dl className="flex mt-3">
                                 <div className="flex flex-col">
                                     <dt className="text-sm font-medium text-slate-600">Also known as:</dt>
-                                    <dd className="text-xs text-slate-500">Lista de sinonimos, Lista de sinonimos,Lista de sinonimos,Lista de sinonimos,Lista de sinonimos</dd>
+                                    <dd className="text-xs text-slate-500">
+                                        {exactSynonymsResults.length === 0 ? "" : exactSynonymsResults.map((result, index) => result.exactSynonym.value + (index < exactSynonymsResults.length - 1 ? ", " : "") + (index === exactSynonymsResults.length - 1 && relatedSynonymsResults.length > 0 ? ", " : ""))}
+                                        {relatedSynonymsResults.length === 0 ? "" : relatedSynonymsResults.map((result, index) => result.hasRelatedSynonym.value + (index < relatedSynonymsResults.length - 1 ? ", " : ""))}
+                                    </dd>
                                 </div>
                             </dl>
                             
                             <dl className="flex mt-3">
                                 <div className="flex flex-col">
                                     <dt className="text-sm font-medium text-slate-600">Disease Group</dt>
-                                    <dd className="text-xs text-slate-500">Disease Group</dd>
+                                    <dd className="text-xs text-slate-500">
+                                        {groupResults.length === 0 ? "" : groupResults.map((result, index) => result.groupName.value + (index < groupResults.length - 1 ? ", " : ""))}
+                                    </dd>
                                 </div>
                             </dl>
                             
                             <dl className="flex mt-3">
                                 <div className="flex flex-col">
                                     <dt className="text-sm font-medium text-slate-600">Part of the body</dt>
-                                    <dd className="text-xs text-slate-500">Part of the body</dd>
+                                    <dd className="text-xs text-slate-500">
+                                        {bodyPart.length === 0 ? "" : bodyPart.map((result, index) => result.location.value + (index < bodyPart.length - 1 ? ", " : ""))}
+                                    </dd>
                                 </div>
                             </dl>
 
@@ -90,8 +182,10 @@ function DiseasePage() {
                                 <h6 className="text font-bold text-slate-900">
                                     Symptoms
                                 </h6>
-                                <p className="mt-1 text-xs font-medium text-slate-600">Symptom 1</p>
-                                <p className="mt-1 text-xs font-medium text-slate-600">Symptom 2</p>
+                                {symptomsResults.length === 0 ? "No symptoms on database" : symptomsResults.map((result, index) => 
+                                <p key={result.symptomName.value + index} className="mt-1 text-xs font-medium text-slate-600">
+                                    {result.symptomName.value}
+                                </p>)}
                             </div>
                         </Col>
 

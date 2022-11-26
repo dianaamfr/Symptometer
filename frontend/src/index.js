@@ -20,7 +20,7 @@ root.render(
           <Route index element={<Main />} />
           <Route path="results" element={<Results />} />
           <Route path="aboutus" element={<AboutUs/>} />
-          <Route path="disease" element={<DiseasePage/>} />
+          <Route path="disease/:id" element={<DiseasePage/>} />
 
         </Route>
       </Routes>

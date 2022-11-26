@@ -52,11 +52,11 @@ PREFIX doi: <https://doi.org/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX doid: <http://purl.obolibrary.org/obo/>
-PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
+PREFIX oboinowl: <http://www.geneontology.org/formats/oboinowl#>
 
 SELECT ?diseaseName ?definition ?icd
 WHERE {
-	?diseaseID rdfs:label ?diseaseName . 
+	  ?diseaseID rdfs:label ?diseaseName . 
     ?diseaseID doid:IAO_0000115 ?definition .
     ?diseaseID oboinowl:hasDbXref ?icd .
     FILTER(STRSTARTS(STR(?icd), "ICD10CM:"))
@@ -150,3 +150,68 @@ WHERE {
 }
 GROUP BY ?groupName
 ORDER BY DESC(COUNT(?diseaseID))
+
+# List of synonyms for a disease:
+SELECT ?exactSynonym
+WHERE {
+  ?diseaseID oboinowl:id "DOID:10784" .
+  ?diseaseID oboinowl:hasExactSynonym ?exactSynonym . 
+}
+
+#List of related synonyms for a disease:
+SELECT ?hasRelatedSynonym 
+WHERE {
+  ?diseaseID oboinowl:id "DOID:10784" .
+  ?diseaseID oboinowl:hasRelatedSynonym ?hasRelatedSynonym . 
+}
+
+# Disease definition
+SELECT ?diseaseName ?definition
+WHERE {
+	?diseaseID rdfs:label ?diseaseName . 
+  ?diseaseID doid:IAO_0000115 ?definition .
+  ?diseaseID oboinowl:id "DOID:10784" .
+}
+
+# Disease group
+SELECT ?diseaseName ?groupName
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?classID .
+  ?classID rdfs:label ?groupName .
+  ?diseaseID oboinowl:id "DOID:10784" .
+}
+
+#Group of a Disease group
+SELECT ?diseaseName ?groupName ?groupGroupName
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?classID .
+  ?classID rdfs:label ?groupName .
+  ?classID rdfs:subClassOf ?groupClassID .
+  ?groupClassID rdfs:label ?groupGroupName .
+  ?diseaseID oboinowl:id "DOID:10784" .
+}
+
+# Disease symptoms
+SELECT ?diseaseName ?symptomName
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0002452 .
+  ?restriction owl:someValuesFrom ?symptomID .
+  ?symptomID rdfs:label ?symptomName .
+  ?diseaseID oboinowl:id "DOID:10784" .
+}
+
+#Disease name, definition, group and group of group
+SELECT ?diseaseName ?definition ?groupName ?groupGroupName
+WHERE {
+  	?diseaseID oboinowl:id "DOID:10784" .
+	  ?diseaseID rdfs:label ?diseaseName . 
+    ?diseaseID doid:IAO_0000115 ?definition .
+  	?diseaseID rdfs:subClassOf ?classID .
+  	?classID rdfs:label ?groupName .
+  	?classID rdfs:subClassOf ?groupClassID .
+  	?groupClassID rdfs:label ?groupGroupName .
+}
