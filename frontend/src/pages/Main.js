@@ -1,28 +1,15 @@
 //import Footer from "../components/footer.js";
-import React, { useCallback, useRef, useState, useEffect } from 'react'
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactTags from "react-tag-input-custom-search";
+import searchClassNames from "../utils/searchClasses";
 
 function Main() {
   const navigate = useNavigate();
   const backendUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
-  const reactTags = useRef()
+  const reactTags = useRef();
   const [tags, setTags] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const searchClassNames = {
-    root: "md:w-[584px] mx-auto mt-7 flex flex-wrap w-[92%] items-center border hover:shadow-md",
-    rootFocused: 'is-focused',
-    selected: 'react-tags__selected pl-2',
-    selectedTag: "react-tags__selected-tag text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease",
-    selectedTagName: 'react-tags__selected-tag-name',
-    search: 'react-tags__search',
-    searchWrapper: 'react-tags__search-wrapper',
-    searchInput: "w-full bg-transparent py-[14px] pl-2 outline-none",
-    suggestions: 'react-tags__suggestions',
-    suggestionActive: 'is-active',
-    suggestionDisabled: 'is-disabled',
-    suggestionPrefix: 'react-tags__suggestion-prefix'
-  }
 
   useEffect(() => {
     const requestOptions = {
@@ -33,13 +20,11 @@ function Main() {
       },
     };
     fetch(backendUrl, requestOptions)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         setSuggestions(result);
-      }
-      )
-  }, [backendUrl])
+      });
+  }, [backendUrl]);
 
   async function handleClickAboutUs() {
     navigate("/aboutus");
@@ -47,24 +32,26 @@ function Main() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let query = event.currentTarget.elements.query.value;
-    let queryArray = query.split(",");
-    var params = new URLSearchParams(queryArray.map((s) => ["query", s]));
-
+    var params = new URLSearchParams(tags.map((t) => ["query", t.name]));
     navigate({
       pathname: "/results",
       search: `?${params.toString()}`,
     });
   }
 
-  const onDelete = useCallback((tagIndex) => {
-    setTags(tags.filter((_, i) => i !== tagIndex))
-  }, [tags])
+  const onDelete = useCallback(
+    (tagIndex) => {
+      setTags(tags.filter((_, i) => i !== tagIndex));
+    },
+    [tags]
+  );
 
-  const onAddition = useCallback((newTag) => {
-    setTags([...tags, newTag])
-  }, [tags])
-
+  const onAddition = useCallback(
+    (newTag) => {
+      if (!tags.find((tag) => tag.id === newTag.id)) setTags([...tags, newTag]);
+    },
+    [tags]
+  );
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-white">
@@ -72,15 +59,21 @@ function Main() {
         <img alt="" className="h-[150px]" src={require("../assets/logo.png")} />
       </div>
 
+      <form
+        onSubmit={handleSubmit}
+      >
         <ReactTags
           ref={reactTags}
           tags={tags}
-          suggestions={suggestions}
+          suggestions={suggestions.filter(
+            (_, i) => !tags.find((tag) => tag.id === _.id)
+          )}
           handleDelete={onDelete}
           handleAddition={onAddition}
           placeholder="Search for symptoms"
           classNames={searchClassNames}
         />
+      </form>
       {/* <div className="md:w-[584px] mx-auto mt-7 flex w-[92%] items-center rounded-full border hover:shadow-md">
         <div className="pl-5">
           <svg

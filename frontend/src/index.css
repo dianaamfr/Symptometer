@@ -62,7 +62,7 @@ input[data-autocompleted] {
   border: 1px solid #D1D1D1;
   border-radius: 2px;
   background: #F1F1F1;
-  margin: 0.5rem;
+  margin-right: 0.5rem;
   font-size: inherit;
   line-height: inherit;
 }
