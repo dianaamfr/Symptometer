@@ -1,8 +1,45 @@
 //import Footer from "../components/footer.js";
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+import ReactTags from "react-tag-input-custom-search";
 
 function Main() {
   const navigate = useNavigate();
+  const backendUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
+  const reactTags = useRef()
+  const [tags, setTags] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const searchClassNames = {
+    root: "md:w-[584px] mx-auto mt-7 flex flex-wrap w-[92%] items-center border hover:shadow-md",
+    rootFocused: 'is-focused',
+    selected: 'react-tags__selected pl-2',
+    selectedTag: "react-tags__selected-tag text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease",
+    selectedTagName: 'react-tags__selected-tag-name',
+    search: 'react-tags__search',
+    searchWrapper: 'react-tags__search-wrapper',
+    searchInput: "w-full bg-transparent py-[14px] pl-2 outline-none",
+    suggestions: 'react-tags__suggestions',
+    suggestionActive: 'is-active',
+    suggestionDisabled: 'is-disabled',
+    suggestionPrefix: 'react-tags__suggestion-prefix'
+  }
+
+  useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    fetch(backendUrl, requestOptions)
+      .then(res => res.json())
+      .then((result) => {
+        console.log(result);
+        setSuggestions(result);
+      }
+      )
+  }, [backendUrl])
 
   async function handleClickAboutUs() {
     navigate("/aboutus");
@@ -20,13 +57,31 @@ function Main() {
     });
   }
 
+  const onDelete = useCallback((tagIndex) => {
+    setTags(tags.filter((_, i) => i !== tagIndex))
+  }, [tags])
+
+  const onAddition = useCallback((newTag) => {
+    setTags([...tags, newTag])
+  }, [tags])
+
+
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-white">
       <div>
         <img alt="" className="h-[150px]" src={require("../assets/logo.png")} />
       </div>
 
-      <div className="md:w-[584px] mx-auto mt-7 flex w-[92%] items-center rounded-full border hover:shadow-md">
+        <ReactTags
+          ref={reactTags}
+          tags={tags}
+          suggestions={suggestions}
+          handleDelete={onDelete}
+          handleAddition={onAddition}
+          placeholder="Search for symptoms"
+          classNames={searchClassNames}
+        />
+      {/* <div className="md:w-[584px] mx-auto mt-7 flex w-[92%] items-center rounded-full border hover:shadow-md">
         <div className="pl-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,23 +109,7 @@ function Main() {
           />
           <input type="submit" hidden />
         </form>
-        <div className="pr-5">
-          {/* <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-            />
-          </svg> */}
-        </div>
-      </div>
+      </div>  */}
 
       <div className="mt-3 flex space-x-12">
         <button onClick={handleClickAboutUs} className="bg-[#f8f9fa] px-2 py-1">

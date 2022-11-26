@@ -24,3 +24,76 @@ input:-webkit-autofill:focus {
 input[data-autocompleted] {
   background-color: transparent !important;
 }
+
+
+/* ReactTags */
+
+.react-tags__search {
+  padding: unset;
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+
+.react-tags {
+  position: relative;
+  padding: 6px 0 0 6px;
+  border: 1px solid #D1D1D1;
+  border-radius: 10px;
+  font-size: 1em;
+  line-height: 1.2;
+  cursor: text;
+}
+
+.react-tags.is-focused {
+  border-color: #B1B1B1;
+}
+
+.react-tags__selected {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.react-tags__selected-tag {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: unset;
+  padding: 6px 8px;
+  border: 1px solid #D1D1D1;
+  border-radius: 2px;
+  background: #F1F1F1;
+  margin: 0.5rem;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.react-tags__selected-tag:after {
+  content: '\2715';
+  color: #AAA;
+  margin-left: 8px;
+}
+
+.react-tags__selected-tag:hover,
+.react-tags__selected-tag:focus {
+  border-color: #B1B1B1;
+}
+
+
+.is-focused input {
+  outline: unset;
+}
+
+.react-tags__suggestions {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  overflow: auto;
+  max-height: 200px;
+  left: 0;
+  
+}
