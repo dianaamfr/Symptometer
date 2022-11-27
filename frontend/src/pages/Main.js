@@ -13,6 +13,7 @@ function Main() {
   const [tags, setTags] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
+  /* Fetch possible symptoms from backend */
   useEffect(() => {
     const requestOptions = {
       method: "GET",
@@ -28,6 +29,7 @@ function Main() {
       });
   }, [backendUrl]);
 
+  /* Event handlers */
   async function handleClickAboutUs() {
     navigate("/aboutus");
   }
@@ -101,9 +103,10 @@ function Main() {
     [tags]
   );
 
+  /* Render */
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-white">
-      <div>
+      <div className="mb-7">
         <img alt="" className="h-[150px]" src={require("../assets/logo.png")} />
       </div>
 
@@ -120,7 +123,7 @@ function Main() {
           handleDelete={onDelete}
           handleAddition={onAddition}
           placeholder="Search for symptoms"
-          classNames={searchClassNames}
+          classNames={searchClassNames("md:w-[660px]")}
           minQueryLength={1}
         />
       </form>
@@ -133,7 +136,7 @@ function Main() {
       
       <ToastContainer
         position="bottom-right"
-        autoClose={3000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

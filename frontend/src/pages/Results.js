@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import DiseaseCard from "../components/disease_card.js";
 import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import getDiseaseGroup from "../utils/icd10_codes.js";
+import { addDiseaseGroup } from "../utils/icd10_codes.js";
+import ReactTags from "react-tag-input-custom-search";
+import searchClassNames from "../utils/searchClasses";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
   const navigate = useNavigate();
-  const backendUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
+  // React Tags
+  const reactTags = useRef();
+  const [tags, setTags] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
-  function addDiseaseGroup(diseases) {
-    diseases.forEach(element => {
-      element.group = getDiseaseGroup(element.icd.value);
-    }); 
-  }
-
-  // Get results
-  useEffect(() => { 
-    const params = new URLSearchParams({
-      symptoms: JSON.stringify(searchParams.getAll("query")),
-    }).toString();
-
+  // Fetch symptoms and get disease results
+  useEffect(() => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -31,7 +30,28 @@ function Results() {
         "Access-Control-Allow-Origin": "*",
       },
     };
-    fetch(backendUrl + "?" + params, requestOptions)
+
+    // Fetch possible symptoms
+    fetch(allSymptomsUrl, requestOptions)
+      .then((res) => res.json())
+      .then((result) => {
+        setSuggestions(result);
+        return result;
+      })
+      .then(async (result) => {
+        setTags(
+          result.filter((suggestion, _) =>
+            searchParams.getAll("query").includes(suggestion.name)
+          )
+        );
+      });
+
+    // Fetch disease results
+    const params = new URLSearchParams({
+      symptoms: JSON.stringify(searchParams.getAll("query")),
+    }).toString();
+
+    fetch(diseasesUrl + "?" + params, requestOptions)
       .then((response) => {
         return response.json();
       })
@@ -40,55 +60,115 @@ function Results() {
         addDiseaseGroup(results);
         setQueryResults(results);
       });
-  }, [backendUrl, searchParams]);
+  }, [diseasesUrl, allSymptomsUrl, searchParams]);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    let query = event.currentTarget.elements.query.value;
-    let queryArray = query.split(",");
-    var params = new URLSearchParams(queryArray.map(s =>['query',s]))
+  async function handleSubmit() {
+    if (tags.length === 0) {
+      toast.warn("Please enter at least one symptom", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    var params = new URLSearchParams(tags.map((t) => ["query", t.name]));
     setSearchParams(params);
   }
 
-  async function backToHomePage() {
-    navigate('/');
+  function handleKeyDown(event) {
+    if (event.key === "Enter") {
+      if (reactTags.current.suggestions.state.options.length === 0) {
+        event.preventDefault();
+        toast.warn("No symptoms matching your input.", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
   }
 
+  const onDelete = useCallback(
+    (tagIndex) => {
+      setTags(tags.filter((_, i) => i !== tagIndex));
+      // Todo: redo query
+    },
+    [tags]
+  );
+
+  const onAddition = useCallback(
+    (newTag) => {
+      if (tags.length >= 3) {
+        toast.warn("Please enter at most 3 symptoms!", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
+      if (!tags.find((tag) => tag.id === newTag.id)) {
+        setTags([...tags, newTag]);
+      }
+      // Todo: redo query
+    },
+    [tags]
+  );
+
+  async function backToHomePage() {
+    navigate("/");
+  }
+
+  /* Render */
   return (
     <Container fluid="md">
       <Row className="mt-5">
         <Col className="col-2">
           <button>
-            <img alt="" onClick={backToHomePage} src={require("../assets/logo.png")} />
+            <img
+              alt=""
+              onClick={backToHomePage}
+              src={require("../assets/logo.png")}
+            />
           </button>
         </Col>
         <Col className="p-0 flex items-center">
-          <div className="w-[100%] mr-0 flex items-center rounded-full border hover:shadow-md">
-            <div className="pl-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <form className="w-full bg-transparent rounded-full outline-none" onSubmit={handleSubmit}>
-              <input
-                id="query"
-                type="text"
-                className="w-full bg-transparent rounded-full py-2 pl-4 outline-none"
-              />
-              <input type="submit" hidden />
-            </form>
-          </div>
+          <form
+            className="grow"
+            onKeyDown={handleKeyDown}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <ReactTags
+              ref={reactTags}
+              tags={tags}
+              suggestions={suggestions.filter(
+                (_, i) => !tags.find((tag) => tag.id === _.id)
+              )}
+              handleDelete={onDelete}
+              handleAddition={onAddition}
+              placeholder="Search for symptoms"
+              classNames={searchClassNames("md:w-[100%]")}
+              minQueryLength={1}
+            />
+          </form>
         </Col>
       </Row>
       <Row className="mt-3 ">
@@ -99,13 +179,16 @@ function Results() {
           <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
             All symptoms
           </button>
-         
         </nav>
       </Row>
       <Row className="pr-0 mr-0">
         <Col className="col-9 pr-0 mr-0">
-          {queryResults.map((disease, index) => 
-            <DiseaseCard key={disease.diseaseName.value + index} disease={disease} />)}
+          {queryResults.map((disease, index) => (
+            <DiseaseCard
+              key={disease.diseaseName.value + index}
+              disease={disease}
+            />
+          ))}
           {/* <DiseaseCard />
           <DiseaseCard />
           <DiseaseCard /> */}
@@ -114,6 +197,18 @@ function Results() {
           <Symptoms />
         </Col>
       </Row>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Container>
   );
 }

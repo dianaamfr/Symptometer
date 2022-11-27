@@ -1,5 +1,5 @@
-const searchClassNames = {
-  root: "react-tags md:w-[660px] mx-auto mt-7 flex flex-wrap w-[92%] items-center border hover:shadow-md",
+const searchClassNames = (widthClass) => ({
+  root: `react-tags ${widthClass} mx-auto flex flex-wrap items-center border hover:shadow-md`,
   rootFocused: "is-focused",
   selected: "react-tags__selected",
   selectedTag:
@@ -12,6 +12,6 @@ const searchClassNames = {
   suggestionActive: "is-active",
   suggestionDisabled: "is-disabled",
   suggestionPrefix: "react-tags__suggestion-prefix",
-};
+});
 
 export default searchClassNames;

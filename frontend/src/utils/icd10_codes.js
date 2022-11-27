@@ -25,7 +25,7 @@ var groups = [
 
 //Example: ICD10CM:E88
 
-function getDiseaseGroup(diseaseICD){
+export function getDiseaseGroup(diseaseICD){
     for (var i=0; i < groups.length; i++) {
         if((diseaseICD[8] === groups[i].start[0] || 
             diseaseICD[8] === groups[i].end[0]) && 
@@ -36,6 +36,8 @@ function getDiseaseGroup(diseaseICD){
     }
 }
 
-export default getDiseaseGroup;
-
-// console.log(getDiseaseGroup("ICD10CM:E88"))
+export function addDiseaseGroup(diseases) {
+    diseases.forEach((element) => {
+      element.group = getDiseaseGroup(element.icd.value);
+    });
+  }

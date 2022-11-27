@@ -121,6 +121,7 @@ input[data-autocompleted] {
   top: 100%;
   left: 0;
   width: 100%;
+  z-index: 1;
 }
 
 @media screen and (min-width: 30em) {
