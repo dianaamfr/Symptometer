@@ -32,6 +32,11 @@ function Main() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if(tags.length === 0) {
+      
+    }
+
     var params = new URLSearchParams(tags.map((t) => ["query", t.name]));
     navigate({
       pathname: "/results",
@@ -74,38 +79,10 @@ function Main() {
           classNames={searchClassNames}
         />
       </form>
-      {/* <div className="md:w-[584px] mx-auto mt-7 flex w-[92%] items-center rounded-full border hover:shadow-md">
-        <div className="pl-5">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <form
-          className="w-full bg-transparent rounded-full pl-4 outline-none"
-          onSubmit={handleSubmit}
-        >
-          <input
-            id="query"
-            type="text"
-            className="w-full bg-transparent rounded-full py-[14px] pl-4 outline-none"
-          />
-          <input type="submit" hidden />
-        </form>
-      </div>  */}
 
-      <div className="mt-3 flex space-x-12">
-        <button onClick={handleClickAboutUs} className="bg-[#f8f9fa] px-2 py-1">
+
+      <div className="mt-5 flex space-x-12">
+        <button onClick={handleClickAboutUs} className="bg-gray px-4 py-2">
           About Us
         </button>
       </div>

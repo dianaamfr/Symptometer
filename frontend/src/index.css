@@ -25,75 +25,144 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
-
-/* ReactTags */
-
-.react-tags__search {
-  padding: unset;
-  position: relative;
-  width: 100%;
-  flex: 1;
-}
-
+/* React Tags */
 .react-tags {
   position: relative;
   padding: 6px 0 0 6px;
   border: 1px solid #D1D1D1;
-  border-radius: 10px;
+  border-radius: 1px;
   font-size: 1em;
   line-height: 1.2;
   cursor: text;
+  border-radius: 10px;
 }
 
 .react-tags.is-focused {
   border-color: #B1B1B1;
 }
 
+.is-focused input {
+  outline: unset;
+}
+
 .react-tags__selected {
-  display: inline-flex;
-  flex-wrap: wrap;
+  display: inline;
 }
 
 .react-tags__selected-tag {
   display: inline-block;
   box-sizing: border-box;
-  margin: unset;
+  margin: 0 6px 6px 0;
   padding: 6px 8px;
-  border: 1px solid #D1D1D1;
+  border: 1px solid gray;
   border-radius: 2px;
-  background: #F1F1F1;
-  margin-right: 0.5rem;
+  background: #f1f1f1;
   font-size: inherit;
   line-height: inherit;
+  color: gray;
 }
 
 .react-tags__selected-tag:after {
   content: '\2715';
-  color: #AAA;
+  color: gray;
   margin-left: 8px;
 }
 
 .react-tags__selected-tag:hover,
 .react-tags__selected-tag:focus {
-  border-color: #B1B1B1;
+  border-color: #3daeaf;
+  color: #3daeaf;
+}
+
+.react-tags__selected-tag:hover:after {
+  content: '\2715';
+  color: #3daeaf;
+  margin-left: 8px;
+}
+
+.react-tags__search {
+  display: inline-block;
+  padding: 7px 2px;
+  margin-bottom: 6px;
+  max-width: 100%;
 }
 
 
-.is-focused input {
-  outline: unset;
+@media screen and (min-width: 30em) {
+
+  .react-tags__search {
+    /* this will become the offsetParent for suggestions */
+    position: relative;
+  }
+
+}
+
+.react-tags__search-input {
+  /* prevent autoresize overflowing the container */
+  max-width: 100%;
+
+  /* remove styles and layout from this element */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+
+  /* match the font styles */
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.react-tags__search-input::-ms-clear {
+  display: none;
 }
 
 .react-tags__suggestions {
   position: absolute;
-  z-index: 1;
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  overflow: auto;
-  max-height: 200px;
+  top: 100%;
   left: 0;
-  
+  width: 100%;
+}
+
+@media screen and (min-width: 30em) {
+
+  .react-tags__suggestions {
+    width: 240px;
+  }
+
+}
+
+.react-tags__suggestions ul {
+  margin: 4px -1px;
+  padding: 0;
+  list-style: none;
+  background: white;
+  border: 1px solid #D1D1D1;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.react-tags__suggestions li {
+  border-bottom: 1px solid #ddd;
+  padding: 6px 8px;
+}
+
+.react-tags__suggestions li mark {
+  text-decoration: underline;
+  background: none;
+  font-weight: 600;
+  color: #3daeaf;
+}
+
+.react-tags__suggestions li:hover {
+  cursor: pointer;
+  background: #d3dcdb;
+}
+
+.react-tags__suggestions li.is-active {
+  background: #d3dcdb;
+}
+
+.react-tags__suggestions li.is-disabled {
+  opacity: 0.5;
+  cursor: auto;
 }
