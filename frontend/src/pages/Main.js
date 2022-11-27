@@ -82,7 +82,7 @@ function Main() {
   const onAddition = useCallback(
     (newTag) => {
       if (tags.length >= 3) {
-        toast.warn('🦄 Please enter at most 3 symptoms!', {
+        toast.warn('Please enter at most 3 symptoms!', {
           position: "bottom-right",
           autoClose: 3000,
           hideProgressBar: false,
