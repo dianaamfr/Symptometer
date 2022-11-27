@@ -101,8 +101,9 @@ function Results() {
 
   const onDelete = useCallback(
     (tagIndex) => {
-      setTags(tags.filter((_, i) => i !== tagIndex));
-      // Todo: redo query
+      const newTags = tags.filter((_, index) => index !== tagIndex);
+      var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+      setSearchParams(params);
     },
     [tags]
   );
@@ -123,9 +124,10 @@ function Results() {
         return;
       }
       if (!tags.find((tag) => tag.id === newTag.id)) {
-        setTags([...tags, newTag]);
+        const newTags = [...tags, newTag];
+        var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+        setSearchParams(params);
       }
-      // Todo: redo query
     },
     [tags]
   );
