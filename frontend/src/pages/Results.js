@@ -12,7 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
   const navigate = useNavigate();
-  const diseasesUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesUrl =
+    process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
@@ -45,6 +46,11 @@ function Results() {
           )
         );
       });
+
+    if (searchParams.getAll("query").length === 0) {
+      setQueryResults([]);
+      return;
+    }
 
     // Fetch disease results
     const params = new URLSearchParams({
@@ -104,8 +110,7 @@ function Results() {
       const newTags = tags.filter((_, index) => index !== tagIndex);
       var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
       setSearchParams(params);
-    },
-    [tags]
+    }
   );
 
   const onAddition = useCallback(
@@ -185,15 +190,16 @@ function Results() {
       </Row>
       <Row className="pr-0 mr-0">
         <Col className="col-9 pr-0 mr-0">
-          {queryResults.map((disease, index) => (
-            <DiseaseCard
-              key={disease.diseaseName.value + index}
-              disease={disease}
-            />
-          ))}
-          {/* <DiseaseCard />
-          <DiseaseCard />
-          <DiseaseCard /> */}
+          {queryResults.length === 0 ? (
+            <p className="mt-4 ml-4 text-m font-small text-slate-600">No results to show. Don't forget to input your symptoms.</p>
+          ) : (
+            queryResults.map((disease, index) => (
+              <DiseaseCard
+                key={disease.diseaseName.value + index}
+                disease={disease}
+              />
+            ))
+          )}
         </Col>
         <Col className="p-0 col-3">
           <Symptoms />
