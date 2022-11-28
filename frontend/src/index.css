@@ -24,3 +24,7 @@ input:-webkit-autofill:focus {
 input[data-autocompleted] {
   background-color: transparent !important;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

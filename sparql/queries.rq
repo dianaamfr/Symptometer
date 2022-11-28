@@ -215,3 +215,14 @@ WHERE {
   	?classID rdfs:subClassOf ?groupClassID .
   	?groupClassID rdfs:label ?groupGroupName .
 }
+
+#Related Diseases
+SELECT ?diseaseName ?relatedDiseaseName
+WHERE {
+  ?diseaseID rdfs:label ?diseaseName .
+  ?diseaseID rdfs:subClassOf ?restriction .
+  ?restriction owl:onProperty doid:RO_0004020 .
+  ?restriction owl:someValuesFrom ?relatedDiseaseID .
+  ?relatedDiseaseID rdfs:label ?relatedDiseaseName .
+  ?diseaseID oboinowl:id "DOID:10784" .
+}

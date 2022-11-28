@@ -10,7 +10,7 @@ function Main() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    let query = event.currentTarget.elements.query.value;
+    let query = event.currentTarget.elements.query.value.toLowerCase();
     let queryArray = query.split(",");
     var params = new URLSearchParams(queryArray.map((s) => ["query", s]));
 
