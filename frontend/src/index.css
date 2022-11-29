@@ -167,3 +167,8 @@ input[data-autocompleted] {
   opacity: 0.5;
   cursor: auto;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}
+

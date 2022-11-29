@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 function DiseaseCard({ disease }) {
   const navigate = useNavigate();
 
-  async function goToDiseasePage() {
-    navigate("/disease");
+  async function goToDiseasePage(){
+      let diseaseId = disease.doid.value
+      navigate('/disease/' + diseaseId);
   }
 
   return (
@@ -28,7 +29,6 @@ function DiseaseCard({ disease }) {
                 ))}
               </p>
             </div>
-
             <div className="mt-1 sm:pr-8">
               <p className="text-sm text-slate-500">
                 {disease.definition.value}

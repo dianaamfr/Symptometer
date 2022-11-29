@@ -103,6 +103,219 @@ router.get("/byAllSymptoms", async (req, res) => {
     });
 });
 
+router.get("/:id/name", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+    ' SELECT ?diseaseName ?definition ?icd\n\
+      WHERE { \n\
+        ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+        ?diseaseID rdfs:label ?diseaseName . \n\
+        ?diseaseID doid:IAO_0000115 ?definition . \n\
+        ?diseaseID oboinowl:hasDbXref ?icd . \n\
+        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
+    }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+router.get("/:id/exactSynonyms", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?exactSynonym \n\
+      WHERE { \n\
+        ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+        ?diseaseID oboinowl:hasExactSynonym ?exactSynonym . \n\
+    }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+router.get("/:id/relatedSynonyms", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?hasRelatedSynonym \n\
+      WHERE { \n\
+        ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+        ?diseaseID oboinowl:hasRelatedSynonym ?hasRelatedSynonym . \n\
+    }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+router.get("/:id/group", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?groupName \n\
+        WHERE { \n\
+          ?diseaseID rdfs:label ?diseaseName . \n\
+          ?diseaseID rdfs:subClassOf ?classID . \n\
+          ?classID rdfs:label ?groupName . \n\
+          ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+      }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+router.get("/:id/groupOfGroup", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?groupGroupName \n\
+      WHERE { \n\
+        ?diseaseID rdfs:label ?diseaseName . \n\
+        ?diseaseID rdfs:subClassOf ?classID . \n\
+        ?classID rdfs:label ?groupName . \n\
+        ?classID rdfs:subClassOf ?groupClassID . \n\
+        ?groupClassID rdfs:label ?groupGroupName . \n\
+        ?diseaseID oboinowl:id "'  + diseaseId + '" . \n\
+    }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+router.get("/:id/symptoms", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?symptomName \n\
+      WHERE { \n\
+        ?diseaseID rdfs:label ?diseaseName . \n\
+        ?diseaseID rdfs:subClassOf ?restriction . \n\
+        ?restriction owl:onProperty doid:RO_0002452 . \n\
+        ?restriction owl:someValuesFrom ?symptomID . \n\
+        ?symptomID rdfs:label ?symptomName . \n\
+        ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+      }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
+
+router.get("/:id/bodyPart", async (req, res) => {
+  let diseaseId = req.params.id
+  const query = 
+    prefix +
+      'SELECT DISTINCT ?location \n\
+      WHERE { \n\
+        ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
+        ?diseaseID rdfs:subClassOf ?restriction . \n\
+        ?restriction owl:onProperty doid:RO_0004026 . \n\
+        ?restriction owl:someValuesFrom ?locationID . \n\
+        ?locationID rdfs:label ?location . \n\
+      }';
+
+    await axios({
+      url: ontologyUrl,
+      method: "GET",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Accept: "application/sparql-results+json",
+      },
+      params: { query: query },
+    })
+      .then((jenaResponse) => {
+        return res.json(jenaResponse.data);
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
+
+});
+
 function buildSymptomsQuery(symptoms) {
   return symptoms
     .map((symptom, i) => {

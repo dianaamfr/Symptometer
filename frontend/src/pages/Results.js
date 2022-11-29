@@ -11,12 +11,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
+
   const navigate = useNavigate();
   const diseasesUrl =
     process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
+
   // React Tags
   const reactTags = useRef();
   const [tags, setTags] = useState([]);
