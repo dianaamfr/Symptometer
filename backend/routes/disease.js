@@ -112,13 +112,14 @@ router.get("/:id/name", async (req, res) => {
         ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
         ?diseaseID doid:IAO_0000115 ?definition . \n\
+        OPTIONAL { \n\
         { \n\
           SELECT ?diseaseID (GROUP_CONCAT(?icd;SEPARATOR=",") AS ?icds) \n\
           WHERE { \n\
             ?diseaseID oboinowl:hasDbXref ?icd . \n\
             FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
           } GROUP BY ?diseaseID \n\
-        } \n\
+        }} \n\
       }';
 
     await axios({

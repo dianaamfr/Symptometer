@@ -36,10 +36,12 @@ export function getDiseaseGroup(diseaseICD){
 export function addDiseaseGroup(diseases) {
     diseases.forEach((disease) => {
         disease.group = [];
-        disease.icds.value.split(",").forEach((icd) => {
-            if (disease.group.indexOf(getDiseaseGroup(icd)) === -1) {
-                disease.group.push(getDiseaseGroup(icd));
-            }
-        });
+        if(disease.icds) {
+            disease.icds.value.split(",").forEach((icd) => {
+                if (disease.group.indexOf(getDiseaseGroup(icd)) === -1) {
+                    disease.group.push(getDiseaseGroup(icd));
+                }
+            });
+        }
     });
 }
