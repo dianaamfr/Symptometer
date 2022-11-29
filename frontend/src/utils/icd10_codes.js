@@ -27,10 +27,8 @@ var groups = [
 
 function getDiseaseGroup(diseaseICD){
     for (var i=0; i < groups.length; i++) {
-        if((diseaseICD[8] === groups[i].start[0] || 
-            diseaseICD[8] === groups[i].end[0]) && 
-            diseaseICD.substring(9) > groups[i].start.substring(1) && 
-            diseaseICD.substring(9) < groups[i].end.substring(1) ){
+        if(diseaseICD.substring(8,11) >= groups[i].start && 
+            diseaseICD.substring(8,11) <= groups[i].end ){
                 return groups[i].group
         }
     }
@@ -38,4 +36,4 @@ function getDiseaseGroup(diseaseICD){
 
 export default getDiseaseGroup;
 
-// console.log(getDiseaseGroup("ICD10CM:E88"))
+//console.log(getDiseaseGroup("ICD10CM:A00"))
