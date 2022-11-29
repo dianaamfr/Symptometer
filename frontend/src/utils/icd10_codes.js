@@ -24,13 +24,10 @@ var groups = [
 ]
 
 //Example: ICD10CM:E88
-// TODO: fix for some values
 export function getDiseaseGroup(diseaseICD){
     for (var i=0; i < groups.length; i++) {
-        if((diseaseICD[8] === groups[i].start[0] || 
-            diseaseICD[8] === groups[i].end[0]) && 
-            diseaseICD.substring(9,11) >= groups[i].start.substring(1,3) && 
-            diseaseICD.substring(9,11) <= groups[i].end.substring(1,3)){
+        if(diseaseICD.substring(8,11) >= groups[i].start && 
+            diseaseICD.substring(8,11) <= groups[i].end ){
                 return groups[i].group
         }
     }
@@ -50,3 +47,5 @@ export function addDiseaseGroup(diseases) {
         }
     });
 }
+
+export default getDiseaseGroup;
