@@ -131,7 +131,6 @@ function Results() {
       }
       if (!tags.find((tag) => tag.id === newTag.id)) {
         const newTags = [...tags, newTag];
-        console.log(newTags)
         var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
         setSearchParams(params);
       }
@@ -148,7 +147,6 @@ function Results() {
   let symptoms_arr = [{id:0, name:"headache"}, {id:1, name:"chest pain"}]
 
   async function addToQuery(event) {
-    console.log(event)
     let symp = {id:event.target.key,name:event.target.innerText}
     onAddition(symp)
   }
@@ -220,9 +218,9 @@ function Results() {
             <div className="justify-between sm:flex">
                 <h5 className="text-xl font-bold text-slate-900"> Related Symptoms </h5>
             </div>
-            <div className="mt-1 sm:pr-8">
+            <div>
               {symptoms_arr.map((symp) =>
-                <p className="text-sm text-slate-500" onClick={addToQuery} key={symp.id}> {symp.name}</p>)
+                <p type="button" title="Click to add symptom to the search" className="p-2 hover:text-teal-600 text-gray-500 bg-gray-200 font-semibold text-sm align-center text-center cursor-pointer active:bg-gray-300" onClick={addToQuery} key={symp.id}> {symp.name}</p>)
               }
             </div>
           </div>
