@@ -47,5 +47,3 @@ export function addDiseaseGroup(diseases) {
         }
     });
 }
-
-export default getDiseaseGroup;

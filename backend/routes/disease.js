@@ -40,7 +40,7 @@ router.get("/bySymptoms", async (req, res) => {
             VALUES ?symptoms {${symptomsValues}} \n\
             FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
           } GROUP BY ?diseaseID \n\
-          ORDER BY DESC(COUNT(?symptomID)) \n\
+          ORDER BY DESC(COUNT(?symptomID)) ?diseaseName \n\
         }\n\
       }`;
 
@@ -82,7 +82,7 @@ router.get("/byAllSymptoms", async (req, res) => {
             ?diseaseID oboinowl:hasDbXref ?icd . \n\
             FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
           } GROUP BY ?diseaseID \n\
-          ORDER BY DESC(COUNT(?symptomID)) \n\
+          ORDER BY DESC(COUNT(?symptomID)) ?diseaseName \n\
         }\n\
       }`;
 
