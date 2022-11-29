@@ -24,8 +24,7 @@ var groups = [
 ]
 
 //Example: ICD10CM:E88
-
-function getDiseaseGroup(diseaseICD){
+export function getDiseaseGroup(diseaseICD){
     for (var i=0; i < groups.length; i++) {
         if(diseaseICD.substring(8,11) >= groups[i].start && 
             diseaseICD.substring(8,11) <= groups[i].end ){
@@ -34,6 +33,15 @@ function getDiseaseGroup(diseaseICD){
     }
 }
 
-export default getDiseaseGroup;
-
-//console.log(getDiseaseGroup("ICD10CM:A00"))
+export function addDiseaseGroup(diseases) {
+    diseases.forEach((disease) => {
+        disease.group = [];
+        if(disease.icds) {
+            disease.icds.value.split(",").forEach((icd) => {
+                if (disease.group.indexOf(getDiseaseGroup(icd)) === -1) {
+                    disease.group.push(getDiseaseGroup(icd));
+                }
+            });
+        }
+    });
+}

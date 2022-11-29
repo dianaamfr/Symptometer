@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getDiseaseGroup from "../utils/icd10_codes.js";
+import {addDiseaseGroup} from "../utils/icd10_codes.js";
 
 function DiseasePage() {
   const navigate = useNavigate();
@@ -20,12 +20,6 @@ function DiseasePage() {
 
   async function backToHomePage() {
     navigate("/");
-  }
-
-  function addDiseaseGroup(diseases) {
-    diseases.forEach((element) => {
-      element.group = getDiseaseGroup(element.icd.value);
-    });
   }
 
   //Get disease details
@@ -225,7 +219,7 @@ function DiseasePage() {
                   : symptomsResults.map((result, index) => (
                       <p
                         key={result.symptomName.value + index}
-                        className="mt-1 text-xs font-medium text-slate-600 capitalize"
+                        className="mt-1 mb-0 text-xs font-medium text-slate-600 capitalize"
                       >
                         {result.symptomName.value}
                       </p>

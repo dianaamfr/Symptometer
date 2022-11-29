@@ -24,23 +24,23 @@ router.get("/bySymptoms", async (req, res) => {
   const symptomsValues = symptoms.join(" ");
   const query =
     prefix +
-    ` SELECT ?diseaseName ?definition ?icd ?doid \n\
+    ` SELECT ?diseaseName ?definition ?icds ?doid \n\
       WHERE { \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
         ?diseaseID doid:IAO_0000115 ?definition . \n\
-        ?diseaseID oboinowl:hasDbXref ?icd . \n\
         ?diseaseID oboinowl:id ?doid . \n\
-        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
         { \n\
-          SELECT ?diseaseID \n\
+          SELECT ?diseaseID (GROUP_CONCAT(?icd;SEPARATOR=",") AS ?icds) \n\
           WHERE { \n\
             ?diseaseID rdfs:subClassOf ?restriction . \n\
+            ?diseaseID oboinowl:hasDbXref ?icd . \n\
             ?restriction owl:onProperty doid:RO_0002452 . \n\
             ?restriction owl:someValuesFrom ?symptomID . \n\
             ?symptomID rdfs:label ?symptoms . \n\
             VALUES ?symptoms {${symptomsValues}} \n\
+            FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
           } GROUP BY ?diseaseID \n\
-          ORDER BY DESC(COUNT(?symptomID)) \n\
+          ORDER BY DESC(COUNT(?symptomID)) ?diseaseName \n\
         }\n\
       }`;
 
@@ -70,19 +70,19 @@ router.get("/byAllSymptoms", async (req, res) => {
 
   const query =
     prefix +
-    ` SELECT ?diseaseName ?definition ?icd ?doid \n\
+    ` SELECT ?diseaseName ?definition ?icds ?doid \n\
       WHERE { \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
         ?diseaseID doid:IAO_0000115 ?definition . \n\
-        ?diseaseID oboinowl:hasDbXref ?icd . \n\
         ?diseaseID oboinowl:id ?doid . \n\
-        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
         { \n\
-          SELECT ?diseaseID \n\
+          SELECT ?diseaseID (GROUP_CONCAT(?icd;SEPARATOR=",") AS ?icds) \n\
           WHERE { \n\
             ${symptomsQuery} \n\
+            ?diseaseID oboinowl:hasDbXref ?icd . \n\
+            FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
           } GROUP BY ?diseaseID \n\
-          ORDER BY DESC(COUNT(?symptomID)) \n\
+          ORDER BY DESC(COUNT(?symptomID)) ?diseaseName \n\
         }\n\
       }`;
 
@@ -107,14 +107,20 @@ router.get("/:id/name", async (req, res) => {
   let diseaseId = req.params.id
   const query = 
     prefix +
-    ' SELECT ?diseaseName ?definition ?icd\n\
+    ' SELECT ?diseaseName ?definition ?icds\n\
       WHERE { \n\
         ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
         ?diseaseID doid:IAO_0000115 ?definition . \n\
-        ?diseaseID oboinowl:hasDbXref ?icd . \n\
-        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
-    }';
+        OPTIONAL { \n\
+        { \n\
+          SELECT ?diseaseID (GROUP_CONCAT(?icd;SEPARATOR=",") AS ?icds) \n\
+          WHERE { \n\
+            ?diseaseID oboinowl:hasDbXref ?icd . \n\
+            FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
+          } GROUP BY ?diseaseID \n\
+        }} \n\
+      }';
 
     await axios({
       url: ontologyUrl,
