@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import DiseaseCard from "../components/disease_card.js";
-import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -132,6 +131,7 @@ function Results() {
       }
       if (!tags.find((tag) => tag.id === newTag.id)) {
         const newTags = [...tags, newTag];
+        console.log(newTags)
         var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
         setSearchParams(params);
       }
@@ -142,6 +142,17 @@ function Results() {
   async function backToHomePage() {
     navigate("/");
   }
+
+  // Symptoms: 
+
+  let symptoms_arr = [{id:0, name:"headache"}, {id:1, name:"chest pain"}]
+
+  async function addToQuery(event) {
+    console.log(event)
+    let symp = {id:event.target.key,name:event.target.innerText}
+    onAddition(symp)
+  }
+
 
   /* Render */
   return (
@@ -204,7 +215,17 @@ function Results() {
           )}
         </Col>
         <Col className="p-0 col-3">
-          <Symptoms />
+          <div className="mt-3 mx-0 relative block p-8 overflow-hidden border bg-white border-slate-100 rounded-lg ml-6 mr-6" href="">
+            <span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300 to-blue-500"></span>
+            <div className="justify-between sm:flex">
+                <h5 className="text-xl font-bold text-slate-900"> Related Symptoms </h5>
+            </div>
+            <div className="mt-1 sm:pr-8">
+              {symptoms_arr.map((symp) =>
+                <p className="text-sm text-slate-500" onClick={addToQuery} key={symp.id}> {symp.name}</p>)
+              }
+            </div>
+          </div>
         </Col>
       </Row>
       <ToastContainer
