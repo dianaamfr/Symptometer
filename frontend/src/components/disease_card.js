@@ -17,7 +17,7 @@ function DiseaseCard({ disease }) {
         <div className="justify-between sm:flex">
           <Col className="col-9">
             <div>
-              <h5 className="text-xl font-bold text-slate-900">
+              <h5 className="text-xl font-bold text-slate-900 capitalize">
                 {disease.diseaseName.value}
               </h5>
               <p className="mt-1 text-xs font-medium text-slate-600">
@@ -38,7 +38,7 @@ function DiseaseCard({ disease }) {
           <Col className="col-3">
             <div className="flex-shrink-0 hidden ml-3 sm:block">
               <h6 className="text font-bold text-slate-900">Symptoms</h6>
-              <p className="mt-1 text-xs font-medium text-slate-600">
+              <p className="mt-1 mb-0 text-xs font-medium text-slate-600">
                 Symptom 1
               </p>
               <p className="mt-1 text-xs font-medium text-slate-600">

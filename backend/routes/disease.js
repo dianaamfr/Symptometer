@@ -107,14 +107,19 @@ router.get("/:id/name", async (req, res) => {
   let diseaseId = req.params.id
   const query = 
     prefix +
-    ' SELECT ?diseaseName ?definition ?icd\n\
+    ' SELECT ?diseaseName ?definition ?icds\n\
       WHERE { \n\
         ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
         ?diseaseID rdfs:label ?diseaseName . \n\
         ?diseaseID doid:IAO_0000115 ?definition . \n\
-        ?diseaseID oboinowl:hasDbXref ?icd . \n\
-        FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
-    }';
+        { \n\
+          SELECT ?diseaseID (GROUP_CONCAT(?icd;SEPARATOR=",") AS ?icds) \n\
+          WHERE { \n\
+            ?diseaseID oboinowl:hasDbXref ?icd . \n\
+            FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
+          } GROUP BY ?diseaseID \n\
+        } \n\
+      }';
 
     await axios({
       url: ontologyUrl,
