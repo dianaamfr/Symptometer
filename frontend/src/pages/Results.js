@@ -11,7 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
   const navigate = useNavigate();
-  const diseasesUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesSomeSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesAllSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/disease/byAllSymptoms";
   const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
@@ -60,7 +61,7 @@ function Results() {
       symptoms: JSON.stringify(searchParams.getAll("query")),
     }).toString();
 
-    fetch(diseasesUrl + "?" + params, requestOptions)
+    fetch(diseasesSomeSymptomsUrl + "?" + params, requestOptions)
       .then((response) => {
         return response.json();
       })
@@ -78,7 +79,7 @@ function Results() {
       .then((data) => {
         setRelatedSymptoms(data);
       });
-  }, [diseasesUrl, allSymptomsUrl, searchParams]);
+  }, [diseasesSomeSymptomsUrl, allSymptomsUrl, searchParams]);
 
   async function handleSubmit() {
     if (tags.length === 0) {
@@ -157,6 +158,12 @@ function Results() {
     onAddition(symp);
   }
 
+  function setSearchFilter(filter) {
+    const newParams = tags.map((t) => ["query", t.name]);
+    newParams.push(["filter", filter]);
+    setSearchParams(new URLSearchParams(newParams));
+  }
+
   /* Render */
   return (
     <Container fluid="md">
@@ -196,10 +203,14 @@ function Results() {
       </Row>
       <Row className="mt-3 ">
         <nav className=" mr-0 flex flex-col sm:flex-row">
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
+          <button 
+            onClick={() => setSearchFilter("some")}
+            className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
             At least one symptom
           </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
+          <button 
+            onClick={() => setSearchFilter("all")}
+            className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
             All symptoms
           </button>
         </nav>
