@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import DiseaseCard from "../components/disease_card.js";
-import Symptoms from "../components/symptoms_card";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,10 +10,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
-
   const navigate = useNavigate();
-  const diseasesUrl =
-    process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
@@ -23,6 +20,9 @@ function Results() {
   const reactTags = useRef();
   const [tags, setTags] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+
+  // Related Symptoms
+  const [relatedSymptoms, setRelatedSymptoms] = useState([]);
 
   // Fetch symptoms and get disease results
   useEffect(() => {
@@ -51,6 +51,7 @@ function Results() {
 
     if (searchParams.getAll("query").length === 0) {
       setQueryResults([]);
+      setRelatedSymptoms([]);
       return;
     }
 
@@ -67,6 +68,15 @@ function Results() {
         let results = data.results.bindings;
         addDiseaseGroup(results);
         setQueryResults(results);
+      });
+
+    // Fetch related symptoms
+    fetch(allSymptomsUrl + "/related?" + params, requestOptions)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setRelatedSymptoms(data);
       });
   }, [diseasesUrl, allSymptomsUrl, searchParams]);
 
@@ -107,13 +117,11 @@ function Results() {
     }
   }
 
-  const onDelete = useCallback(
-    (tagIndex) => {
-      const newTags = tags.filter((_, index) => index !== tagIndex);
-      var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
-      setSearchParams(params);
-    }
-  );
+  const onDelete = useCallback((tagIndex) => {
+    const newTags = tags.filter((_, index) => index !== tagIndex);
+    var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+    setSearchParams(params);
+  });
 
   const onAddition = useCallback(
     (newTag) => {
@@ -141,6 +149,12 @@ function Results() {
 
   async function backToHomePage() {
     navigate("/");
+  }
+
+  // Symptoms
+  async function addToQuery(event) {
+    let symp = suggestions.find((suggestion) => suggestion.name === event.target.innerText);
+    onAddition(symp);
   }
 
   /* Render */
@@ -193,7 +207,9 @@ function Results() {
       <Row className="pr-0 mr-0">
         <Col className="col-9 pr-0 mr-0">
           {queryResults.length === 0 ? (
-            <p className="mt-4 ml-4 text-m font-small text-slate-600">No results to show. Don't forget to input your symptoms.</p>
+            <p className="mt-4 ml-4 text-m font-small text-slate-600">
+              No results to show. Don't forget to input your symptoms.
+            </p>
           ) : (
             queryResults.map((disease, index) => (
               <DiseaseCard
@@ -204,7 +220,30 @@ function Results() {
           )}
         </Col>
         <Col className="p-0 col-3">
-          <Symptoms />
+          <div
+            className="mt-3 mx-0 relative block p-8 overflow-hidden border bg-white border-slate-100 rounded-lg ml-6 mr-6"
+            href=""
+          >
+            <span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300 to-blue-500"></span>
+            <div className="justify-between sm:flex">
+              <h5 className="text-xl font-bold text-slate-900">
+                Related Symptoms
+              </h5>
+            </div>
+            <div>
+              {relatedSymptoms.map((symp) => (
+                <p
+                  type="button"
+                  title="Click to add symptom to the search"
+                  className="p-2 hover:text-teal-600 text-gray-500 bg-gray-200 font-semibold text-sm align-center text-center cursor-pointer active:bg-gray-300"
+                  onClick={addToQuery}
+                  key={`related_${symp.relatedSymptom.value}`}
+                >
+                  {symp.relatedSymptom.value}
+                </p>
+              ))}
+            </div>
+          </div>
         </Col>
       </Row>
       <ToastContainer
