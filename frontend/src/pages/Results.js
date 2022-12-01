@@ -176,6 +176,11 @@ function Results() {
     setSearchParams(new URLSearchParams(newParams));
   }
 
+  function isAllFilterActive() {
+    if(searchParams.get("filter") === "all") return true;
+    return false;
+  }
+
   /* Render */
   return (
     <Container fluid="md">
@@ -217,13 +222,15 @@ function Results() {
         <nav className=" mr-0 flex flex-col sm:flex-row">
           <button
             onClick={() => setSearchFilter("some")}
-            className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500"
+            className={`text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none 
+            ${!isAllFilterActive() ? "text-blue-500 border-b-2 font-medium border-blue-500" : ""}`}
           >
             At least one symptom
           </button>
           <button
             onClick={() => setSearchFilter("all")}
-            className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none"
+            className={`text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none
+            ${isAllFilterActive() ? "text-blue-500 border-b-2 font-medium border-blue-500" : ""}`}
           >
             All symptoms
           </button>
