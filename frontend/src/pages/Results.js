@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import DiseaseCard from "../components/disease_card.js";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
@@ -85,7 +85,7 @@ function Results() {
       .then((data) => {
         setRelatedSymptoms(data);
       });
-  }, [diseasesSomeSymptomsUrl, allSymptomsUrl, searchParams]);
+  }, [diseasesSomeSymptomsUrl, diseasesAllSymptomsUrl, allSymptomsUrl, searchParams]);
 
   async function handleSubmit() {
     if (tags.length === 0) {
@@ -124,16 +124,15 @@ function Results() {
     }
   }
 
-  const onDelete = useCallback((tagIndex) => {
+  const onDelete = (tagIndex) => {
     const newTags = tags.filter((_, index) => index !== tagIndex);
     const newParams = newTags.map((t) => ["query", t.name]);
         newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
     var params = new URLSearchParams(newParams);
     setSearchParams(params);
-  });
+  };
 
-  const onAddition = useCallback(
-    (newTag) => {
+  const onAddition = (newTag) => {
       if (tags.length >= 3) {
         toast.warn("Please enter at most 3 symptoms!", {
           position: "bottom-right",
@@ -154,9 +153,7 @@ function Results() {
         var params = new URLSearchParams(newParams);
         setSearchParams(params);
       }
-    },
-    [tags]
-  );
+  };
 
   async function backToHomePage() {
     navigate("/");
@@ -237,7 +234,7 @@ function Results() {
         </nav>
       </Row>
       <Row className="pr-0 mr-0">
-        <Col className="col-9 pr-0 mr-0">
+        <Col className="col-9 mb-7 pr-0 mr-0">
           {queryResults.length === 0 ? (
             <p className="mt-4 ml-4 text-m font-small text-slate-600">
               No results to show. Don't forget to input your symptoms.
