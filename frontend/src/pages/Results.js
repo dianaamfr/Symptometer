@@ -11,7 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Results() {
   const navigate = useNavigate();
-  const diseasesUrl = process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesSomeSymptomsUrl =
+    process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
+  const diseasesAllSymptomsUrl =
+    process.env.REACT_APP_BACKEND_URL + "/disease/byAllSymptoms";
   const allSymptomsUrl = process.env.REACT_APP_BACKEND_URL + "/symptom";
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryResults, setQueryResults] = useState([]);
@@ -60,6 +63,10 @@ function Results() {
       symptoms: JSON.stringify(searchParams.getAll("query")),
     }).toString();
 
+    const diseasesUrl = searchParams.getAll("filter").includes("all")
+      ? diseasesAllSymptomsUrl
+      : diseasesSomeSymptomsUrl;
+
     fetch(diseasesUrl + "?" + params, requestOptions)
       .then((response) => {
         return response.json();
@@ -78,7 +85,7 @@ function Results() {
       .then((data) => {
         setRelatedSymptoms(data);
       });
-  }, [diseasesUrl, allSymptomsUrl, searchParams]);
+  }, [diseasesSomeSymptomsUrl, allSymptomsUrl, searchParams]);
 
   async function handleSubmit() {
     if (tags.length === 0) {
@@ -119,7 +126,9 @@ function Results() {
 
   const onDelete = useCallback((tagIndex) => {
     const newTags = tags.filter((_, index) => index !== tagIndex);
-    var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+    const newParams = newTags.map((t) => ["query", t.name]);
+        newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+    var params = new URLSearchParams(newParams);
     setSearchParams(params);
   });
 
@@ -140,7 +149,9 @@ function Results() {
       }
       if (!tags.find((tag) => tag.id === newTag.id)) {
         const newTags = [...tags, newTag];
-        var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+        const newParams = newTags.map((t) => ["query", t.name]);
+        newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+        var params = new URLSearchParams(newParams);
         setSearchParams(params);
       }
     },
@@ -153,8 +164,21 @@ function Results() {
 
   // Symptoms
   async function addToQuery(event) {
-    let symp = suggestions.find((suggestion) => suggestion.name === event.target.innerText);
+    let symp = suggestions.find(
+      (suggestion) => suggestion.name === event.target.innerText
+    );
     onAddition(symp);
+  }
+
+  function setSearchFilter(filter) {
+    const newParams = tags.map((t) => ["query", t.name]);
+    newParams.push(["filter", filter]);
+    setSearchParams(new URLSearchParams(newParams));
+  }
+
+  function isAllFilterActive() {
+    if(searchParams.get("filter") === "all") return true;
+    return false;
   }
 
   /* Render */
@@ -196,10 +220,18 @@ function Results() {
       </Row>
       <Row className="mt-3 ">
         <nav className=" mr-0 flex flex-col sm:flex-row">
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
+          <button
+            onClick={() => setSearchFilter("some")}
+            className={`text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none 
+            ${!isAllFilterActive() ? "text-blue-500 border-b-2 font-medium border-blue-500" : ""}`}
+          >
             At least one symptom
           </button>
-          <button className="text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none">
+          <button
+            onClick={() => setSearchFilter("all")}
+            className={`text-gray-600 py-2 px-6 block hover:text-blue-500 focus:outline-none
+            ${isAllFilterActive() ? "text-blue-500 border-b-2 font-medium border-blue-500" : ""}`}
+          >
             All symptoms
           </button>
         </nav>
