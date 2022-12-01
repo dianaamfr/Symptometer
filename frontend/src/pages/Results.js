@@ -126,7 +126,9 @@ function Results() {
 
   const onDelete = useCallback((tagIndex) => {
     const newTags = tags.filter((_, index) => index !== tagIndex);
-    var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+    const newParams = newTags.map((t) => ["query", t.name]);
+        newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+    var params = new URLSearchParams(newParams);
     setSearchParams(params);
   });
 
@@ -147,7 +149,9 @@ function Results() {
       }
       if (!tags.find((tag) => tag.id === newTag.id)) {
         const newTags = [...tags, newTag];
-        var params = new URLSearchParams(newTags.map((t) => ["query", t.name]));
+        const newParams = newTags.map((t) => ["query", t.name]);
+        newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+        var params = new URLSearchParams(newParams);
         setSearchParams(params);
       }
     },
