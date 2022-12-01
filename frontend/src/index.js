@@ -6,6 +6,7 @@ import Main from './pages/Main';
 import Results from './pages/Results';
 import AboutUs from './pages/AboutUs';
 import DiseasePage from './pages/Disease';
+import GroupPage from './pages/Group';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -21,7 +22,7 @@ root.render(
           <Route path="results" element={<Results />} />
           <Route path="aboutus" element={<AboutUs/>} />
           <Route path="disease/:id" element={<DiseasePage/>} />
-
+          <Route path="group/:id" element={<GroupPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

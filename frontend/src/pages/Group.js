@@ -5,18 +5,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {addDiseaseGroup} from "../utils/icd10_codes.js";
 
-function DiseasePage() {
+function GroupPage() {
   const navigate = useNavigate();
-  const [diseaseId, setDiseaseId] = useState(useParams().id);
-  const backendUrl =
-    process.env.REACT_APP_BACKEND_URL + "/disease/" + diseaseId;
+  const [groupId, setGroupId] = useState(useParams().id);
   const [nameResults, setNameResults] = useState([]);
   const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
-  const [relatedSynonymsResults, setRelatedSynonymsResults] = useState([]);
   const [groupResults, setGroupResults] = useState([]);
-  const [groupOfGroupResults, setGroupOfGroupResults] = useState([]);
-  const [symptomsResults, setSymptomsResults] = useState([]);
-  const [bodyPart, setBodyPart] = useState([]);
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL + "/disease/" + groupId;
+
 
   async function backToHomePage() {
     navigate("/");
@@ -24,6 +21,7 @@ function DiseasePage() {
 
   async function goToGroupPage(groupId){
     navigate("/group/" + groupId);
+    setGroupId(groupId);
   }
 
   //Get disease details
@@ -41,7 +39,6 @@ function DiseasePage() {
       })
       .then((data) => {
         let results = data.results.bindings;
-        addDiseaseGroup(results);
         setNameResults(results);
       });
     fetch(backendUrl + "/exactSynonyms", requestOptions)
@@ -52,14 +49,6 @@ function DiseasePage() {
         let results = data.results.bindings;
         setExactSynonymsResults(results);
       });
-    fetch(backendUrl + "/relatedSynonyms", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setRelatedSynonymsResults(results);
-      });
     fetch(backendUrl + "/group", requestOptions)
       .then((response) => {
         return response.json();
@@ -69,31 +58,7 @@ function DiseasePage() {
         console.log(results);
         setGroupResults(results);
       });
-    fetch(backendUrl + "/groupOfGroup", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setGroupOfGroupResults(results);
-      });
-    fetch(backendUrl + "/bodyPart", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setBodyPart(results);
-      });
-    fetch(backendUrl + "/symptoms", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setSymptomsResults(results);
-      });
-  }, [backendUrl, diseaseId]);
+  }, [backendUrl, groupId]);
 
   return (
     <Container fluid="md">
@@ -140,63 +105,19 @@ function DiseasePage() {
                   </dt>
                   <dd className="text-xs text-slate-500 capitalize">
                     {exactSynonymsResults.length === 0
-                      ? ""
+                      ? "No information available"
                       : exactSynonymsResults.map(
                           (result, index) =>
                             result.exactSynonym.value +
                             (index < exactSynonymsResults.length - 1
                               ? ", "
-                              : "") +
-                            (index === exactSynonymsResults.length - 1 &&
-                            relatedSynonymsResults.length > 0
-                              ? ", "
                               : "")
-                        )}
-                    {relatedSynonymsResults.length === 0
-                      ? "No information available"
-                      : relatedSynonymsResults.map(
-                          (result, index) =>
-                            result.hasRelatedSynonym.value +
-                            (index < relatedSynonymsResults.length - 1
-                              ? ", "
-                              : "")
-                        )}
+                    )}
                   </dd>
                 </div>
               </dl>
-
-              <dl className="flex mt-3">
-                <div className="flex flex-col">
-                  <dt className="text-sm font-medium text-slate-600">
-                    Disease Group
-                  </dt>
-                  <dd className="text-xs text-slate-500 capitalize">
-                    {nameResults.length === 0
-                      ? ""
-                      : nameResults.map((result) => result.group)}
-                    {/* {groupResults.length === 0 ? "" : groupResults.map((result, index) => result.groupName.value + (index < groupResults.length - 1 ? ", " : ""))} */}
-                  </dd>
-                </div>
-              </dl>
-
-              <dl className="flex mt-3">
-                <div className="flex flex-col">
-                  <dt className="text-sm font-medium text-slate-600">
-                    Part of the Body
-                  </dt>
-                  <dd className="text-xs text-slate-500 capitalize">
-                    {bodyPart.length === 0
-                      ? "No information available"
-                      : bodyPart.map(
-                          (result, index) =>
-                            result.location.value +
-                            (index < bodyPart.length - 1 ? ", " : "")
-                        )}
-                  </dd>
-                </div>
-              </dl>
-
-              <dl className="flex mt-3">
+              {groupResults.length !== 0 ? (
+                <dl className="flex mt-3">
                 <div className="flex flex-col">
                   <dt className="text-sm font-medium text-slate-600 mb-1">
                     See Also
@@ -214,22 +135,26 @@ function DiseasePage() {
                         ))}
                   </div>
                 </div>
-              </dl>
-            </Col>
-            <Col className="col-3">
-              <div className="flex-shrink-0 hidden ml-3 sm:block">
-                <h6 className="text font-bold text-slate-900">Symptoms</h6>
-                {symptomsResults.length === 0
-                  ? "No symptoms on database"
-                  : symptomsResults.map((result, index) => (
-                      <p
-                        key={result.symptomName.value + index}
-                        className="mt-1 mb-0 text-xs font-medium text-slate-600 capitalize"
-                      >
-                        {result.symptomName.value}
-                      </p>
-                    ))}
-              </div>
+              </dl>): null}
+              {/* <dl className="flex mt-3">
+                <div className="flex flex-col">
+                  <dt className="text-sm font-medium text-slate-600 mb-1">
+                    See Also
+                  </dt>
+                  <div className="flex flex-row">
+                    {groupResults.length === 0
+                      ? ""
+                      : groupResults.map((result, index) => (
+                          <button onClick={() => {goToGroupPage(result.doid.value)}}
+                            key={`see_also_${index}`}
+                            className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white capitalize"
+                          >
+                            {result.groupName.value}
+                          </button>
+                        ))}
+                  </div>
+                </div>
+              </dl> */}
             </Col>
           </div>
         </div>
@@ -238,4 +163,4 @@ function DiseasePage() {
   );
 }
 
-export default DiseasePage;
+export default GroupPage;
