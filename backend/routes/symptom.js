@@ -25,8 +25,10 @@ router.get("/", async (req, res) => {
       ?restriction owl:onProperty doid:RO_0002452 . \n\
       ?restriction owl:someValuesFrom ?symptomID . \n\
       ?symptomID rdfs:label ?symptom . \n\
+      ?diseaseID oboinowl:hasDbXref ?icd . \n\
+      FILTER(STRSTARTS(STR(?icd), "ICD10CM:")) \n\
     } \n\
-    ORDER BY DESC(?symptom)`;
+    ORDER BY ASC(?symptom)`;
 
   await axios({
     url: ontologyUrl,
