@@ -66,7 +66,6 @@ function DiseasePage() {
       })
       .then((data) => {
         let results = data.results.bindings;
-        console.log(results);
         setGroupResults(results);
       });
     fetch(backendUrl + "/groupOfGroup", requestOptions)

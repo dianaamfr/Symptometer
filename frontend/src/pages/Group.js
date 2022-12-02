@@ -3,16 +3,15 @@ import Container from "react-bootstrap/Container";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {addDiseaseGroup} from "../utils/icd10_codes.js";
 
 function GroupPage() {
   const navigate = useNavigate();
-  const [groupId, setGroupId] = useState(useParams().id);
+  const { id } = useParams();
   const [nameResults, setNameResults] = useState([]);
   const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
   const [groupResults, setGroupResults] = useState([]);
   const backendUrl =
-    process.env.REACT_APP_BACKEND_URL + "/disease/" + groupId;
+    process.env.REACT_APP_BACKEND_URL + "/disease/" + id;
 
 
   async function backToHomePage() {
@@ -21,7 +20,6 @@ function GroupPage() {
 
   async function goToGroupPage(groupId){
     navigate("/group/" + groupId);
-    setGroupId(groupId);
   }
 
   //Get disease details
@@ -55,10 +53,9 @@ function GroupPage() {
       })
       .then((data) => {
         let results = data.results.bindings;
-        console.log(results);
         setGroupResults(results);
       });
-  }, [backendUrl, groupId]);
+  }, [backendUrl, id]);
 
   return (
     <Container fluid="md">
@@ -76,7 +73,6 @@ function GroupPage() {
       <Row className="px-3 mr-0">
         <div
           className="mx-0 mt-3 px-3 relative block p-8 overflow-hidden border bg-white border-slate-100 rounded-lg ml-6 mr-6"
-          // href=""
         >
           <span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300 to-blue-500"></span>
 
