@@ -3,13 +3,13 @@ import Container from "react-bootstrap/Container";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {addDiseaseGroup} from "../utils/icd10_codes.js";
+import { addDiseaseGroup } from "../utils/icd10_codes.js";
 
 function DiseasePage() {
   const navigate = useNavigate();
-  const [diseaseId, setDiseaseId] = useState(useParams().id);
+  const { id } = useParams();
   const backendUrl =
-    process.env.REACT_APP_BACKEND_URL + "/disease/" + diseaseId;
+    process.env.REACT_APP_BACKEND_URL + "/disease/" + id;
   const [nameResults, setNameResults] = useState([]);
   const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
   const [relatedSynonymsResults, setRelatedSynonymsResults] = useState([]);
@@ -20,6 +20,10 @@ function DiseasePage() {
 
   async function backToHomePage() {
     navigate("/");
+  }
+
+  async function goToGroupPage(groupId) {
+    navigate("/group/" + groupId);
   }
 
   //Get disease details
@@ -39,56 +43,63 @@ function DiseasePage() {
         let results = data.results.bindings;
         addDiseaseGroup(results);
         setNameResults(results);
-      });
-    fetch(backendUrl + "/exactSynonyms", requestOptions)
-      .then((response) => {
-        return response.json();
+        return results;
       })
-      .then((data) => {
-        let results = data.results.bindings;
-        setExactSynonymsResults(results);
+      .then(async (results) => {
+        if (results.length === 0) {
+          navigate("/");
+        }
+
+        fetch(backendUrl + "/exactSynonyms", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setExactSynonymsResults(results);
+          });
+        fetch(backendUrl + "/relatedSynonyms", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setRelatedSynonymsResults(results);
+          });
+        fetch(backendUrl + "/group", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setGroupResults(results);
+          });
+        fetch(backendUrl + "/groupOfGroup", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setGroupOfGroupResults(results);
+          });
+        fetch(backendUrl + "/bodyPart", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setBodyPart(results);
+          });
+        fetch(backendUrl + "/symptoms", requestOptions)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            let results = data.results.bindings;
+            setSymptomsResults(results);
+          });
       });
-    fetch(backendUrl + "/relatedSynonyms", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setRelatedSynonymsResults(results);
-      });
-    fetch(backendUrl + "/group", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setGroupResults(results);
-      });
-    fetch(backendUrl + "/groupOfGroup", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setGroupOfGroupResults(results);
-      });
-    fetch(backendUrl + "/bodyPart", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setBodyPart(results);
-      });
-    fetch(backendUrl + "/symptoms", requestOptions)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let results = data.results.bindings;
-        setSymptomsResults(results);
-      });
-  }, [backendUrl, diseaseId]);
+  }, [backendUrl, id]);
 
   return (
     <Container fluid="md">
@@ -148,7 +159,7 @@ function DiseasePage() {
                               : "")
                         )}
                     {relatedSynonymsResults.length === 0
-                      ? ""
+                      ? "No information available"
                       : relatedSynonymsResults.map(
                           (result, index) =>
                             result.hasRelatedSynonym.value +
@@ -181,7 +192,7 @@ function DiseasePage() {
                   </dt>
                   <dd className="text-xs text-slate-500 capitalize">
                     {bodyPart.length === 0
-                      ? "No information"
+                      ? "No information available"
                       : bodyPart.map(
                           (result, index) =>
                             result.location.value +
@@ -201,6 +212,9 @@ function DiseasePage() {
                       ? ""
                       : groupResults.map((result, index) => (
                           <button
+                            onClick={() => {
+                              goToGroupPage(result.doid.value);
+                            }}
                             key={`see_also_${index}`}
                             className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white capitalize"
                           >

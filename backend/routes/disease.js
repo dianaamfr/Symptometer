@@ -200,11 +200,12 @@ router.get("/:id/group", async (req, res) => {
   let diseaseId = req.params.id
   const query = 
     prefix +
-      'SELECT DISTINCT ?groupName \n\
+      'SELECT DISTINCT ?groupName ?doid\n\
         WHERE { \n\
           ?diseaseID rdfs:label ?diseaseName . \n\
           ?diseaseID rdfs:subClassOf ?classID . \n\
           ?classID rdfs:label ?groupName . \n\
+          ?classID oboinowl:id ?doid .\n\
           ?diseaseID oboinowl:id "' + diseaseId + '" . \n\
       }';
 
