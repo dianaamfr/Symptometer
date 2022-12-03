@@ -158,7 +158,7 @@ function DiseasePage() {
                               ? ", "
                               : "")
                         )}
-                    {relatedSynonymsResults.length === 0
+                    {relatedSynonymsResults.length === 0 && exactSynonymsResults.length === 0
                       ? "No information available"
                       : relatedSynonymsResults.map(
                           (result, index) =>
