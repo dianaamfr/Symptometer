@@ -128,8 +128,8 @@ function Main() {
         />
       </form>
 
-      <div className="mt-5 flex space-x-12">
-        <button onClick={handleClickAboutUs} className="bg-gray px-4 py-2">
+      <div className="mt-5 flex space-x-12 bg-project-theme-60">
+        <button onClick={handleClickAboutUs} className="bg-gray px-2 py-1 ">
           About Us
         </button>
       </div>
