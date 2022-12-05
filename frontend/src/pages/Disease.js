@@ -18,10 +18,6 @@ function DiseasePage() {
   const [symptomsResults, setSymptomsResults] = useState([]);
   const [bodyPart, setBodyPart] = useState([]);
 
-  async function backToHomePage() {
-    navigate("/");
-  }
-
   async function goToGroupPage(groupId) {
     navigate("/group/" + groupId);
   }
@@ -105,13 +101,12 @@ function DiseasePage() {
     <Container fluid="md">
       <Row className="mt-5">
         <Col className="col-2">
-          <button>
+          <a href="/">
             <img
               alt=""
-              onClick={backToHomePage}
               src={require("../assets/logo.png")}
             />
-          </button>
+          </a>
         </Col>
       </Row>
       <Row className="px-3 mr-0">
