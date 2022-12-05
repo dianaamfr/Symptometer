@@ -114,6 +114,7 @@ function Main() {
         onKeyDown={handleKeyDown}
         onSubmit={(e) => {e.preventDefault(); handleSubmit();}}
       >
+        
         <ReactTags
           ref={reactTags}
           tags={tags}
@@ -126,9 +127,12 @@ function Main() {
           classNames={searchClassNames("md:w-[660px]")}
           minQueryLength={1}
         />
+        <div className="search-div" ><input className="search-button bg-project-theme-60" type="submit" value="Search"></input></div>
+        
+        
       </form>
 
-      <div className="mt-5 flex space-x-12 bg-project-theme-60">
+      <div className="mt-2 flex bg-project-theme-60">
         <button onClick={handleClickAboutUs} className="bg-gray px-2 py-1 ">
           About Us
         </button>

@@ -15,7 +15,7 @@ function AboutUs() {
         <Row>
           <div className="mt-5 mb-3 px-4">
             <img
-              alt="" 
+              alt="back home" 
               onClick={backToHomePage}
               className="w-[40%]"
               src={require("../assets/logo.png")}
@@ -180,7 +180,7 @@ function AboutUs() {
                 <h3 className="mb-2 text-xl font-bold ">
                   Provide detailed information
                 </h3>
-                <p className="text-gray-700 ">IDK WHAT TO WRITE</p>
+                <p className="text-gray-700 ">Symptometer allows the user to get detailed information about the diseases that include the symptoms searched, such as a detailed description of the disease, the symptoms, other names for the same disease and the parts of the body it affects. </p>
               </div>
 
               <div>
@@ -203,7 +203,7 @@ function AboutUs() {
                   Retrieve results quickly
                 </h3>
                 <p className="text-gray-700 ">
-                  IDK WHAT TO WRITE Something about efficient queries
+                  Hundreds of results seamlessly instantly with Symptometer's optimized queries.
                 </p>
               </div>
             </div>
