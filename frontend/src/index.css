@@ -172,3 +172,37 @@ input[data-autocompleted] {
   text-transform: capitalize;
 }
 
+
+.pagination {
+  color: rgb(87, 87, 87);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2em;
+  margin-bottom: 3em;
+  list-style: none;
+  cursor: pointer;
+}
+
+.pagination a {
+  padding: 10px;
+  border-radius: 5px;
+  color: #2ca4a5;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination__link {
+  color: #2ca4a5 !important;
+  text-decoration: none; 
+  font-weight: bold;
+}
+
+.pagination__link--active a {
+  color: white !important;
+  background: #2ca4a5;
+}
+
+.pagination__link--disabled a {
+  color: rgb(198, 197, 202);
+}

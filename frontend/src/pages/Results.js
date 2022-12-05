@@ -8,6 +8,8 @@ import ReactTags from "react-tag-input-custom-search";
 import searchClassNames from "../utils/searchClasses";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReactPaginate from 'react-paginate';
+
 
 function Results() {
   const navigate = useNavigate();
@@ -127,7 +129,7 @@ function Results() {
   const onDelete = (tagIndex) => {
     const newTags = tags.filter((_, index) => index !== tagIndex);
     const newParams = newTags.map((t) => ["query", t.name]);
-        newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+    newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
     var params = new URLSearchParams(newParams);
     setSearchParams(params);
   };
@@ -174,8 +176,26 @@ function Results() {
   }
 
   function isAllFilterActive() {
-    if(searchParams.get("filter") === "all") return true;
+    if (searchParams.get("filter") === "all") return true;
     return false;
+  }
+
+  // Pagination
+
+  const PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(0);
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = queryResults.slice(offset, offset + PER_PAGE).map((disease, index) => (
+    <DiseaseCard
+      key={disease.diseaseName.value + index}
+      disease={disease}
+    />
+  ));
+  const pageCount = Math.ceil(queryResults.length / PER_PAGE);
+
+
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
   }
 
   /* Render */
@@ -240,13 +260,20 @@ function Results() {
               No results to show. Don't forget to input your symptoms.
             </p>
           ) : (
-            queryResults.map((disease, index) => (
-              <DiseaseCard
-                key={disease.diseaseName.value + index}
-                disease={disease}
-              />
-            ))
+            currentPageData
           )}
+          <ReactPaginate
+            previousLabel={"← Previous"}
+            nextLabel={"Next →"}
+            pageCount={pageCount}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            previousLinkClassName={"pagination__link"}
+            nextLinkClassName={"pagination__link"}
+            disabledClassName={"pagination__link--disabled"}
+            activeClassName={"pagination__link--active"}
+          />
+
         </Col>
         <Col className="p-0 col-3">
           <div
@@ -273,6 +300,7 @@ function Results() {
               ))}
             </div>
           </div>
+
         </Col>
       </Row>
       <ToastContainer
@@ -287,6 +315,7 @@ function Results() {
         pauseOnHover
         theme="light"
       />
+
     </Container>
   );
 }
