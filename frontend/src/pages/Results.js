@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import DiseaseCard from "../components/disease_card.js";
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { addDiseaseGroup } from "../utils/icd10_codes.js";
 import ReactTags from "react-tag-input-custom-search";
 import searchClassNames from "../utils/searchClasses";
@@ -12,7 +12,6 @@ import ReactPaginate from 'react-paginate';
 
 
 function Results() {
-  const navigate = useNavigate();
   const diseasesSomeSymptomsUrl =
     process.env.REACT_APP_BACKEND_URL + "/disease/bySymptoms";
   const diseasesAllSymptomsUrl =
@@ -157,10 +156,6 @@ function Results() {
       }
   };
 
-  async function backToHomePage() {
-    navigate("/");
-  }
-
   // Symptoms
   async function addToQuery(event) {
     let symp = suggestions.find(
@@ -203,13 +198,12 @@ function Results() {
     <Container fluid="md">
       <Row className="mt-5">
         <Col className="col-2">
-          <button>
+          <a href="/">
             <img
               alt=""
-              onClick={backToHomePage}
               src={require("../assets/logo.png")}
             />
-          </button>
+          </a>
         </Col>
         <Col className="p-0 flex items-center">
           <form
