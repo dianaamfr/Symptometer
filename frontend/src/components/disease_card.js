@@ -1,10 +1,8 @@
 import { Col } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 function DiseaseCard({ disease }) {
-  const navigate = useNavigate();
-
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL + "/disease/" + disease.doid.value;
   const [symptomsResults, setSymptomsResults] = useState([]);
