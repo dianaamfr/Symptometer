@@ -1,5 +1,5 @@
 import { Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 function DiseaseCard({ disease }) {
@@ -8,11 +8,6 @@ function DiseaseCard({ disease }) {
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL + "/disease/" + disease.doid.value;
   const [symptomsResults, setSymptomsResults] = useState([]);
-
-  async function goToDiseasePage(){
-      let diseaseId = disease.doid.value
-      navigate('/disease/' + diseaseId);
-  }
 
   useEffect(() => {
     const requestOptions = {
@@ -34,8 +29,8 @@ function DiseaseCard({ disease }) {
 
 
   return (
-    <button 
-      onClick={goToDiseasePage}
+    <Link to={'/disease/' + disease.doid.value}
+      style={{ textDecoration: 'none' }}
       className="text-left w-100 hover:bg-gray-400 hover:bg-opacity-10 mx-0 mt-3 relative block p-8 overflow-hidden border border-slate-100 rounded-lg ml-6 mr-6">
         <span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-green-300 to-blue-500"></span>
         <div className="justify-between sm:flex">
@@ -78,7 +73,7 @@ function DiseaseCard({ disease }) {
             </div>
           </Col>
         </div>
-    </button>
+    </Link>
   );
 }
 
