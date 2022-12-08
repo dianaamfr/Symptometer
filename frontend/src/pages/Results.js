@@ -188,7 +188,6 @@ function Results() {
   }
 
   function getCurrentPage() {
-    console.log("here")
     return searchParams.get("page") ? parseInt(searchParams.get("page") - 1) : 0;
   }
   
