@@ -136,7 +136,7 @@ function AboutUs() {
                 <h3 className="mb-2 text-xl font-bold ">
                   Comply with Web Semantic Linked Open Data Principles
                 </h3>
-                <p className="text-gray-700 ">IDK WHAT TO WRITE</p>
+                <p className="text-gray-700 ">"This solution gets a 5 stars rating according to the Linked Open Data principles. The data is available online in a non-proprietary format and uses W3C standards (RDF and SPAQRL) to identify information. Symptometer also interlinks internal and external information to provide context."</p>
               </div>
 
               <div>
