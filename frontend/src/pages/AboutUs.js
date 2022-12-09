@@ -90,9 +90,9 @@ function AboutUs() {
                 </div>
                 <h3 className="mb-2 text-xl font-bold ">Allow symptom search</h3>
                 <p className="text-gray-700 ">
-                  Symptometer allows the user to search for the possible causes
+                  Symptometer allows the users to search for the possible causes
                   of their symptoms, identifying the respective possible
-                  diseases. To do that the users simply have to use the search
+                  diseases. To do that, the users simply have to use the search
                   bar and input their symptoms.
                 </p>
               </div>
@@ -156,7 +156,7 @@ function AboutUs() {
                 </div>
                 <h3 className="mb-2 text-xl font-bold ">Intuitive interface </h3>
                 <p className="text-gray-700 ">
-                  The Symptometers' interface allows users to interact with the
+                  Symptometer's interface allows users to interact with the
                   system quickly and easily by using a simple and clean design.
                 </p>
               </div>
@@ -203,7 +203,7 @@ function AboutUs() {
                   Retrieve results quickly
                 </h3>
                 <p className="text-gray-700 ">
-                  Hundreds of results seamlessly instantly with Symptometer's optimized queries.
+                Hundreds of results can be seamlessly and instantly retrieved through Symptometer's optimized queries.
                 </p>
               </div>
             </div>
