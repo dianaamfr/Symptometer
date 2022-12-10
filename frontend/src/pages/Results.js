@@ -28,6 +28,9 @@ function Results() {
   // Related Symptoms
   const [relatedSymptoms, setRelatedSymptoms] = useState([]);
 
+  // Pagination
+  const PER_PAGE = 4;
+
   // Fetch symptoms and get disease results
   useEffect(() => {
     const requestOptions = {
@@ -167,6 +170,7 @@ function Results() {
   function setSearchFilter(filter) {
     const newParams = tags.map((t) => ["query", t.name]);
     newParams.push(["filter", filter]);
+    newParams.push(["page", 1]);
     setSearchParams(new URLSearchParams(newParams));
   }
 
@@ -176,23 +180,17 @@ function Results() {
   }
 
   // Pagination
-
-  const PER_PAGE = 4;
-  const [currentPage, setCurrentPage] = useState(0);
-  const offset = currentPage * PER_PAGE;
-  const currentPageData = queryResults.slice(offset, offset + PER_PAGE).map((disease, index) => (
-    <DiseaseCard
-      key={disease.diseaseName.value + index}
-      disease={disease}
-    />
-  ));
-  const pageCount = Math.ceil(queryResults.length / PER_PAGE);
-
-
-  function handlePageClick({ selected: selectedPage }) {
-    setCurrentPage(selectedPage);
+  function handlePageChange({ selected: selectedPage }) {
+    const newParams = tags.map((t) => ["query", t.name]);
+    newParams.push(["page", selectedPage + 1]);
+    newParams.push(["filter", searchParams.get("filter") ? searchParams.get("filter") : "some"]);
+    setSearchParams(new URLSearchParams(newParams));
   }
 
+  function getCurrentPage() {
+    return searchParams.get("page") ? parseInt(searchParams.get("page") - 1) : 0;
+  }
+  
   /* Render */
   return (
     <Container fluid="md">
@@ -254,13 +252,22 @@ function Results() {
               No results to show. Don't forget to input your symptoms.
             </p>
           ) : (
-            currentPageData
+            queryResults.slice(
+              getCurrentPage() * PER_PAGE, 
+              getCurrentPage() * PER_PAGE + PER_PAGE).map((disease, index) => (
+              <DiseaseCard
+                key={disease.diseaseName.value + index}
+                disease={disease}
+              />
+            ))
           )}
           <ReactPaginate
+            initialPage={getCurrentPage()}
+            forcePage={getCurrentPage()}
             previousLabel={"← Previous"}
             nextLabel={"Next →"}
-            pageCount={pageCount}
-            onPageChange={handlePageClick}
+            pageCount={Math.ceil(queryResults.length / PER_PAGE)}
+            onPageChange={handlePageChange}
             containerClassName={"pagination"}
             previousLinkClassName={"pagination__link"}
             nextLinkClassName={"pagination__link"}

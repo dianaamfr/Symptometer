@@ -1,21 +1,15 @@
 import { Row, Col } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function GroupPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [nameResults, setNameResults] = useState([]);
   const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
   const [groupResults, setGroupResults] = useState([]);
   const backendUrl =
     process.env.REACT_APP_BACKEND_URL + "/disease/" + id;
-
-  async function goToGroupPage(groupId){
-    navigate("/group/" + groupId);
-  }
 
   //Get disease details
   useEffect(() => {
@@ -116,35 +110,17 @@ function GroupPage() {
                     {groupResults.length === 0
                       ? ""
                       : groupResults.map((result, index) => (
-                          <button onClick={() => {goToGroupPage(result.doid.value)}}
+                          <Link to={`/group/${result.doid.value}`} 
+                            style={{ textDecoration: 'none' }}
                             key={`see_also_${index}`}
                             className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white capitalize"
                           >
                             {result.groupName.value}
-                          </button>
+                          </Link>
                         ))}
                   </div>
                 </div>
               </dl>): null}
-              {/* <dl className="flex mt-3">
-                <div className="flex flex-col">
-                  <dt className="text-sm font-medium text-slate-600 mb-1">
-                    See Also
-                  </dt>
-                  <div className="flex flex-row">
-                    {groupResults.length === 0
-                      ? ""
-                      : groupResults.map((result, index) => (
-                          <button onClick={() => {goToGroupPage(result.doid.value)}}
-                            key={`see_also_${index}`}
-                            className="border border-teal-500 text-sm text-slate-600 block rounded-sm mr-3 p-1 flex items-center hover:bg-teal-500 hover:text-white capitalize"
-                          >
-                            {result.groupName.value}
-                          </button>
-                        ))}
-                  </div>
-                </div>
-              </dl> */}
             </Col>
           </div>
         </div>
