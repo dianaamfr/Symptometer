@@ -7,11 +7,11 @@
   1. Install [docker](https://docs.docker.com/get-docker/);
   2. Install [docker-compose](https://docs.docker.com/compose/install/).
 
-  ### 2. Prepare environment files:
+  #### 2. Prepare environment files:
   1. In the backend directory, create a `.env` file similar to the one provided in the `.env.example`;
   2. In the frontend directory, create a `.env` file similar to the one provided in the `.env.example`.
 
-  ### 3. Run the application:
+  #### 3. Run the application:
   1. Go to the root folder of the application;
   2. `docker-compose build`;
   3. `docker-compose up`;
