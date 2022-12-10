@@ -1,4 +1,4 @@
-# WSDL_-Symptometer
+# Symptometer
 
 ### Instructions for installation and usage
 
