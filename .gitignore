@@ -107,3 +107,4 @@ dist
 jena/databases/db/Data-0001/
 jena/databases/db/tdb.lock
 jena/logs/
+apache-jena-fuseki-4.6.1/
