@@ -1,5 +1,21 @@
 # WSDL_-Symptometer
 
-curl --location --request POST 'http://localhost:3030/ontology/data' --header 'Content-Type: multipart/form-data' --form 'data=@ontology/doid-merged.owl' 
+### Instructions for installation and usage
 
-curl --location --request POST "http://localhost:3030/ontology/data" --header "Content-Type: multipart/form-data" --form "data=@ontology/doid-merged.owl" 
+  #### 1. Requirements: 
+  To run this project you must first install docker, docker-compose:
+  1. Install [docker](https://docs.docker.com/get-docker/);
+  2. Install [docker-compose](https://docs.docker.com/compose/install/).
+
+  ### 2. Prepare environment files:
+  1. In the backend directory, create a `.env` file similar to the one provided in the `.env.example`;
+  2. In the frontend directory, create a `.env` file similar to the one provided in the `.env.example`.
+
+  ### 3. Run the application:
+  1. Go to the root folder of the application;
+  2. `docker-compose build`;
+  3. `docker-compose up`;
+  4. Wait for the fuseki container to be up and running (`Start Fuseki (http=3030)` message will be shown in the terminal);
+  5. In another terminal, load the ontology data by issuing the following command from the root folder of the app:
+    `curl --location --request POST 'http://localhost:3030/ontology/data' --header 'Content-Type: multipart/form-data' --form 'data=@ontology/doid-merged.owl'`
+  6. Open your browser on `http://localhost:3000/`
