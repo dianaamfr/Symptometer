@@ -14,7 +14,6 @@ function DiseasePage() {
   const [exactSynonymsResults, setExactSynonymsResults] = useState([]);
   const [relatedSynonymsResults, setRelatedSynonymsResults] = useState([]);
   const [groupResults, setGroupResults] = useState([]);
-  const [groupOfGroupResults, setGroupOfGroupResults] = useState([]);
   const [symptomsResults, setSymptomsResults] = useState([]);
   const [bodyPart, setBodyPart] = useState([]);
 
@@ -45,7 +44,6 @@ function DiseasePage() {
         if (results.length === 0) {
           navigate("/");
         }
-
         fetch(backendUrl + "/exactSynonyms", requestOptions)
           .then((response) => {
             return response.json();
@@ -70,14 +68,6 @@ function DiseasePage() {
             let results = data.results.bindings;
             setGroupResults(results);
           });
-        fetch(backendUrl + "/groupOfGroup", requestOptions)
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            let results = data.results.bindings;
-            setGroupOfGroupResults(results);
-          });
         fetch(backendUrl + "/bodyPart", requestOptions)
           .then((response) => {
             return response.json();
@@ -95,6 +85,7 @@ function DiseasePage() {
             setSymptomsResults(results);
           });
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [backendUrl, id]);
 
   return (
