@@ -278,7 +278,7 @@ function AboutUs() {
               <div>
                 <h4 className="text-2xl">Pedro Queirós</h4>
                 <a 
-                href="https://www.linkedin.com/in/gustavosenamendes/"
+                href="https://www.linkedin.com/in/pedro-queir%C3%B3s-4a14a825a/"
                 className="block text-sm text-gray-700">
                   Linkedin
                   </a>
