@@ -5,8 +5,6 @@
 | ![](/images/results.png) | ![](/images/disease.png) |
 |----|----|
 
-| ![](/images/disease.png) |
-
 ### Instructions for installation and usage
 
   #### 1. Requirements: 
