@@ -1,5 +1,10 @@
 # Symptometer
 
+### Symptometer Platform
+
+|![](/images/home.png) | ![](/images/results.png) | ![](/images/disease.png) |
+|----|----|-----|
+
 ### Instructions for installation and usage
 
   #### 1. Requirements: 
